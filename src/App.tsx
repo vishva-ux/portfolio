@@ -419,10 +419,6 @@ const App: React.FC = () => {
             
             {/* Left: Biography description */}
             <div className="lg:col-span-6 flex flex-col items-start">
-              <div className="flex items-center gap-2 mb-4 reveal">
-                <div className="w-1.5 h-1.5 bg-[#4b5563] rounded-full" />
-                <span className="text-[10px] tracking-widest text-[#4b5563] font-bold uppercase">Biography</span>
-              </div>
               <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f] mb-8 reveal">
                 About Me
               </h2>
@@ -507,10 +503,6 @@ const App: React.FC = () => {
         <section id="work" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <div className="flex items-center gap-2 mb-4 reveal">
-                <div className="w-1.5 h-1.5 bg-[#4b5563] rounded-full" />
-                <span className="text-[10px] tracking-widest text-[#4b5563] font-bold uppercase">Work Showcase</span>
-              </div>
               <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f] reveal">
                 Selected Projects
               </h2>
@@ -597,10 +589,6 @@ const App: React.FC = () => {
         {/* SECTION 4: Credentials (Timeline & Certifications) - Changed & to AND in heading */}
         <section id="credentials" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="flex flex-col items-start mb-12">
-            <div className="flex items-center gap-2 mb-4 reveal">
-              <div className="w-1.5 h-1.5 bg-[#4b5563] rounded-full" />
-              <span className="text-[10px] tracking-widest text-[#4b5563] font-bold uppercase">Qualifications</span>
-            </div>
             <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f] reveal">
               Education and Certifications
             </h2>
@@ -784,10 +772,6 @@ const App: React.FC = () => {
         <section id="contact" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="bg-white border border-[#e5e7eb] rounded-3xl p-8 sm:p-12 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
             <div className="max-w-xl text-left">
-              <div className="flex items-center gap-2 mb-4 reveal">
-                <div className="w-1.5 h-1.5 bg-[#4b5563] rounded-full" />
-                <span className="text-[10px] tracking-widest text-[#4b5563] font-bold uppercase">Let's Collaborate</span>
-              </div>
               <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f] mb-6 reveal">
                 Get In Touch
               </h2>
