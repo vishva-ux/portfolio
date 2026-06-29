@@ -35,7 +35,7 @@ const App: React.FC = () => {
     return () => {
       revealElements.forEach((el) => observer.unobserve(el));
     };
-  }, []);
+  }, [activeGenre]); // Re-register scroll observer when category changes
 
   // 19 categorized repositories
   const projects = [
@@ -194,13 +194,13 @@ const App: React.FC = () => {
   ];
 
   // Mouse move tilt effect handler for cards (True 3D layout rotation)
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
-    // Calculate rotation angles based on mouse offsets (capped at 12 degrees max tilt)
+    // Calculate rotation angles based on mouse offsets (capped at 24 degrees max tilt)
     const rotateX = -((y / rect.height) - 0.5) * 24;
     const rotateY = ((x / rect.width) - 0.5) * 24;
     
@@ -210,7 +210,7 @@ const App: React.FC = () => {
     }
   };
 
-  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
     const card = e.currentTarget;
     const inner = card.querySelector('.tilt-inner') as HTMLDivElement;
     if (inner) {
@@ -357,7 +357,7 @@ const App: React.FC = () => {
                 Im Vishva
               </h1>
 
-              {/* Lead text (Removed specific engineering references) */}
+              {/* Lead text */}
               <p className="animate-fade-up-delay-2 font-inter text-sm sm:text-base text-[#4b5563] leading-relaxed max-w-lg opacity-0 [animation-fill-mode:forwards] font-light reveal">
                 A final-year student at SRM Institute of Science and Technology. I specialize in building end-to-end full-stack software applications, robust systems APIs, and automated cloud deployments.
               </p>
@@ -373,26 +373,34 @@ const App: React.FC = () => {
                 </a>
               </div>
 
-              {/* Core Stats Row (Updated CGPA to 8.29) */}
+              {/* Core Stats Row (Updated CGPA to 8.29 with 3D hover) */}
               <div className="animate-fade-up-delay-4 flex flex-wrap gap-8 sm:gap-12 lg:gap-16 mt-12 lg:mt-16 opacity-0 [animation-fill-mode:forwards] reveal">
                 {[
                   { num: '+20', label: 'Systems Built' },
                   { num: '8.29', label: 'Academic CGPA' },
                   { num: '+19', label: 'Active Repos' },
                 ].map((stat) => (
-                  <div key={stat.label} className="flex flex-col items-start reveal">
-                    <span className="font-inter text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#1d1d1f]">
-                      {stat.num}
-                    </span>
-                    <span className="font-inter text-[9px] sm:text-xs font-medium tracking-widest uppercase text-[#4b5563] mt-1">
-                      {stat.label}
-                    </span>
+                  <div
+                    key={stat.label}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                    className="group flex flex-col items-start reveal perspective-1000 p-2 border border-transparent hover:border-black/5 rounded-xl transition-all duration-300 cursor-default"
+                    style={{ transformStyle: 'preserve-3d' }}
+                  >
+                    <div className="tilt-inner flex flex-col items-start" style={{ transformStyle: 'preserve-3d' }}>
+                      <span style={{ transform: 'translateZ(30px)' }} className="font-inter text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#1d1d1f]">
+                        {stat.num}
+                      </span>
+                      <span style={{ transform: 'translateZ(20px)' }} className="font-inter text-[9px] sm:text-xs font-medium tracking-widest uppercase text-[#4b5563] mt-1">
+                        {stat.label}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Right Photo Column - Floating cutout photo aligned bottom right with no borders */}
+            {/* Right Photo Column */}
             <div className="lg:col-span-5 flex justify-center items-end relative h-[380px] sm:h-[480px] lg:h-[580px] w-full mt-8 lg:mt-0 reveal">
               <div className="absolute inset-0 bg-gradient-to-t from-[#ffffff] via-transparent to-transparent z-10 pointer-events-none" />
               <img
@@ -405,7 +413,7 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* SECTION 2: About Me & Core Capabilities */}
+        {/* SECTION 2: About Me & Core Capabilities with 3D Hover Cards */}
         <section id="about" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             
@@ -460,49 +468,42 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Right: Capabilities blocks */}
+            {/* Right: Capabilities blocks (with 3D Hover tilt) */}
             <div className="lg:col-span-6 flex flex-col gap-6 lg:mt-16">
-              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-[#1d1d1f]/40 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
-                <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#1d1d1f]">
-                  <Cpu className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg text-[#1d1d1f] mb-2">Cognitive Automation</h3>
-                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed">
-                    Engineering autonomous system agents using local LLMs, claim vector indices, predictive analytics, and self-hosted model streams.
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-[#1d1d1f]/40 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
-                <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#1d1d1f]">
-                  <Cloud className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg text-[#1d1d1f] mb-2">Kubernetes & Infrastructure</h3>
-                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed">
-                    Automating infrastructure deployments, building secure GitOps pipelines with Helm/ArgoCD, and configuring telemetry dashboards.
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-[#1d1d1f]/40 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
-                <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#1d1d1f]">
-                  <Server className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg text-[#1d1d1f] mb-2">Scalable Systems Architecture</h3>
-                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed">
-                    Building robust APIs using Python (FastAPI/Flask) and Node.js, mapping relational schemas, and establishing reliable system protocols.
-                  </p>
-                </div>
-              </div>
+              {[
+                { icon: Cpu, title: "Cognitive Automation", desc: "Engineering autonomous system agents using local LLMs, claim vector indices, predictive analytics, and self-hosted model streams." },
+                { icon: Cloud, title: "Kubernetes & Infrastructure", desc: "Automating infrastructure deployments, building secure GitOps pipelines with Helm/ArgoCD, and configuring telemetry dashboards." },
+                { icon: Server, title: "Scalable Systems Architecture", desc: "Building robust APIs using Python (FastAPI/Flask) and Node.js, mapping relational schemas, and establishing reliable system protocols." }
+              ].map((cap) => {
+                const Icon = cap.icon;
+                return (
+                  <div
+                    key={cap.title}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                    className="group bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-black/20 transition-all duration-500 shadow-[0_10px_35px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.04)] perspective-1000 cursor-default reveal"
+                    style={{ transformStyle: 'preserve-3d' }}
+                  >
+                    <div className="tilt-inner flex items-start gap-5 w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+                      <div style={{ transform: 'translateZ(30px)' }} className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#1d1d1f] flex-shrink-0">
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <div style={{ transform: 'translateZ(45px)' }}>
+                        <h3 className="font-semibold text-lg text-[#1d1d1f] mb-2">{cap.title}</h3>
+                        <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed">
+                          {cap.desc}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
           </div>
         </section>
 
-        {/* SECTION 3: Project Showcase with 3D Pop Out Hover Effects */}
+        {/* SECTION 3: Filterable Project Showcase with 3D Hover tilt */}
         <section id="work" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
@@ -541,7 +542,7 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          {/* Grid display of 3D cards */}
+          {/* Grid display of 3D cards (Removed reveal class to prevent category blankouts) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects
               .filter((project) => project.genre === activeGenre)
@@ -550,7 +551,7 @@ const App: React.FC = () => {
                   key={project.title}
                   onMouseMove={handleMouseMove}
                   onMouseLeave={handleMouseLeave}
-                  className="group bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col justify-between min-h-[310px] transition-all duration-500 hover:shadow-[0_30px_60px_rgba(0,0,0,0.05)] hover:border-black/20 cursor-default perspective-1000 reveal"
+                  className="group bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col justify-between min-h-[310px] transition-all duration-500 hover:shadow-[0_30px_60px_rgba(0,0,0,0.05)] hover:border-black/20 cursor-default perspective-1000"
                   style={{ transformStyle: 'preserve-3d' }}
                 >
                   <div className="tilt-inner transition-transform duration-200 ease-out flex flex-col flex-grow" style={{ transformStyle: 'preserve-3d' }}>
@@ -614,34 +615,50 @@ const App: React.FC = () => {
               </h3>
               
               <div className="border-l border-[#e5e7eb] pl-6 ml-3 space-y-12">
-                <div className="relative reveal">
-                  <div className="absolute w-3 h-3 bg-[#4b5563] rounded-full left-[-32.5px] top-1.5 border border-[#ffffff]" />
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-xs text-[#1d1d1f] font-bold">2023 - 2027</span>
-                    <span className="text-[9px] uppercase tracking-wider font-bold bg-black/5 border border-black/10 text-[#4b5563] px-2 py-0.5 rounded">Final Year</span>
+                {/* School 1 */}
+                <div
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  className="relative p-6 bg-white border border-[#e5e7eb] rounded-2xl hover:border-black/20 transition-all duration-500 shadow-[0_10px_35px_rgba(0,0,0,0.01)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.03)] cursor-default perspective-1000 reveal"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  <div className="tilt-inner" style={{ transformStyle: 'preserve-3d' }}>
+                    <div className="absolute w-3 h-3 bg-[#4b5563] rounded-full left-[-38.5px] top-[26px] border border-[#ffffff]" />
+                    <div style={{ transform: 'translateZ(30px)' }} className="flex items-center gap-3 mb-2">
+                      <span className="text-xs text-[#1d1d1f] font-bold">2023 - 2027</span>
+                      <span className="text-[9px] uppercase tracking-wider font-bold bg-black/5 border border-black/10 text-[#4b5563] px-2 py-0.5 rounded">Final Year</span>
+                    </div>
+                    <h4 style={{ transform: 'translateZ(45px)' }} className="font-bold text-lg text-[#1d1d1f] mb-1">SRM Institute of Science and Technology</h4>
+                    <p style={{ transform: 'translateZ(35px)' }} className="text-xs text-[#4b5563] font-medium mb-3">B.Tech in Computer Science</p>
+                    <p style={{ transform: 'translateZ(30px)' }} className="text-xs sm:text-sm text-[#4b5563] leading-relaxed font-light mb-4">
+                      Engineering core competencies include Operating Systems, Object-Oriented Analysis, Relational Database Management, Software Engineering, and Computer Networks.
+                    </p>
+                    <span style={{ transform: 'translateZ(40px)' }} className="inline-block text-xs bg-[#f8f7f4] border border-[#e5e7eb] text-[#1d1d1f] px-3 py-1 rounded-lg">CGPA: 8.29 / 10.00</span>
                   </div>
-                  <h4 className="font-bold text-lg text-[#1d1d1f] mb-1">SRM Institute of Science and Technology</h4>
-                  <p className="text-xs text-[#4b5563] font-medium mb-3">B.Tech in Computer Science</p>
-                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed font-light mb-3">
-                    Engineering core competencies include Operating Systems, Object-Oriented Analysis, Relational Database Management, Software Engineering, and Computer Networks.
-                  </p>
-                  <span className="inline-block text-xs bg-white border border-[#e5e7eb] text-[#1d1d1f] px-3 py-1 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.01)]">CGPA: 8.29 / 10.00</span>
                 </div>
 
-                <div className="relative reveal">
-                  <div className="absolute w-3 h-3 bg-neutral-300 rounded-full left-[-32.5px] top-1.5 border border-[#ffffff]" />
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-xs text-[#4b5563] font-bold">2021 - 2023</span>
-                    <span className="text-[9px] uppercase tracking-wider font-bold bg-[#f8f7f4] border border-[#e5e7eb] text-[#4b5563] px-2 py-0.5 rounded">Schooling</span>
+                {/* School 2 */}
+                <div
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  className="relative p-6 bg-white border border-[#e5e7eb] rounded-2xl hover:border-black/20 transition-all duration-500 shadow-[0_10px_35px_rgba(0,0,0,0.01)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.03)] cursor-default perspective-1000 reveal"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  <div className="tilt-inner" style={{ transformStyle: 'preserve-3d' }}>
+                    <div className="absolute w-3 h-3 bg-neutral-300 rounded-full left-[-38.5px] top-[26px] border border-[#ffffff]" />
+                    <div style={{ transform: 'translateZ(30px)' }} className="flex items-center gap-3 mb-2">
+                      <span className="text-xs text-[#4b5563] font-bold">2021 - 2023</span>
+                      <span className="text-[9px] uppercase tracking-wider font-bold bg-[#f8f7f4] border border-[#e5e7eb] text-[#4b5563] px-2 py-0.5 rounded">Schooling</span>
+                    </div>
+                    <h4 style={{ transform: 'translateZ(45px)' }} className="font-bold text-lg text-[#1d1d1f]/90 mb-1">Kendriya Vidyalaya, Thanjavur</h4>
+                    <p style={{ transform: 'translateZ(35px)' }} className="text-xs text-[#4b5563] font-medium mb-3">All India Senior School Certificate Examination (CBSE)</p>
+                    <span style={{ transform: 'translateZ(40px)' }} className="inline-block text-xs bg-[#f8f7f4] border border-[#e5e7eb] text-[#4b5563] px-3 py-1 rounded-lg">Percentage: 71.8%</span>
                   </div>
-                  <h4 className="font-bold text-lg text-[#1d1d1f]/90 mb-1">Kendriya Vidyalaya, Thanjavur</h4>
-                  <p className="text-xs text-[#4b5563] font-medium mb-3">All India Senior School Certificate Examination (CBSE)</p>
-                  <span className="inline-block text-xs bg-white border border-[#e5e7eb] text-[#4b5563] px-3 py-1 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.01)]">Percentage: 71.8%</span>
                 </div>
               </div>
             </div>
 
-            {/* Certifications Block */}
+            {/* Certifications Block (Added 3D perspective to certificate cards) */}
             <div className="lg:col-span-5 reveal">
               <h3 className="font-semibold text-sm uppercase tracking-widest text-[#1d1d1f] mb-8">
                 Certifications
@@ -649,76 +666,111 @@ const App: React.FC = () => {
 
               <div className="space-y-3.5">
                 {/* 1. AWS Cloud Practitioner */}
-                <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
-                  <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-[#FF9900]">
-                      <path d="M4 14c2.5 3 6.5 3 9 0M14 11l3 3-3 3"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">AWS Cloud Practitioner Essentials</h4>
-                    <span className="text-[10px] text-[#4b5563]">Amazon Web Services &bull; 2026</span>
+                <div
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 hover:shadow-[0_15px_30px_rgba(0,0,0,0.03)] transition-all duration-500 perspective-1000 cursor-default reveal"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  <div className="tilt-inner flex items-center gap-4 w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+                    <div style={{ transform: 'translateZ(30px)' }} className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-[#FF9900]">
+                        <path d="M4 14c2.5 3 6.5 3 9 0M14 11l3 3-3 3"/>
+                      </svg>
+                    </div>
+                    <div style={{ transform: 'translateZ(40px)' }}>
+                      <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">AWS Cloud Practitioner Essentials</h4>
+                      <span className="text-[10px] text-[#4b5563]">Amazon Web Services &bull; 2026</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* 2. DevOps on AWS */}
-                <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
-                  <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#0A66C2]">
-                      <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-                      <path d="M5 13.18v4l7 3.82 7-3.82v-4L12 17l-7-3.82z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">Fundamentals of DevOps on AWS</h4>
-                    <span className="text-[10px] text-[#4b5563]">Simplilearn &bull; 2026</span>
+                <div
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 hover:shadow-[0_15px_30px_rgba(0,0,0,0.03)] transition-all duration-500 perspective-1000 cursor-default reveal"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  <div className="tilt-inner flex items-center gap-4 w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+                    <div style={{ transform: 'translateZ(30px)' }} className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#0A66C2]">
+                        <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                        <path d="M5 13.18v4l7 3.82 7-3.82v-4L12 17l-7-3.82z"/>
+                      </svg>
+                    </div>
+                    <div style={{ transform: 'translateZ(40px)' }}>
+                      <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">Fundamentals of DevOps on AWS</h4>
+                      <span className="text-[10px] text-[#4b5563]">Simplilearn &bull; 2026</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* 3. Cisco Linux Unhatched */}
-                <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
-                  <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#049FD9]">
-                      <rect x="2" y="10" width="2" height="4" rx="0.5"/>
-                      <rect x="5" y="7" width="2" height="10" rx="0.5"/>
-                      <rect x="8" y="5" width="2" height="14" rx="0.5"/>
-                      <rect x="11" y="8" width="2" height="8" rx="0.5"/>
-                      <rect x="14" y="5" width="2" height="14" rx="0.5"/>
-                      <rect x="17" y="7" width="2" height="10" rx="0.5"/>
-                      <rect x="20" y="10" width="2" height="4" rx="0.5"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">Linux Unhatched Certification</h4>
-                    <span className="text-[10px] text-[#4b5563]">Cisco Networking Academy &bull; 2026</span>
+                <div
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 hover:shadow-[0_15px_30px_rgba(0,0,0,0.03)] transition-all duration-500 perspective-1000 cursor-default reveal"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  <div className="tilt-inner flex items-center gap-4 w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+                    <div style={{ transform: 'translateZ(30px)' }} className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#049FD9]">
+                        <rect x="2" y="10" width="2" height="4" rx="0.5"/>
+                        <rect x="5" y="7" width="2" height="10" rx="0.5"/>
+                        <rect x="8" y="5" width="2" height="14" rx="0.5"/>
+                        <rect x="11" y="8" width="2" height="8" rx="0.5"/>
+                        <rect x="14" y="5" width="2" height="14" rx="0.5"/>
+                        <rect x="17" y="7" width="2" height="10" rx="0.5"/>
+                        <rect x="20" y="10" width="2" height="4" rx="0.5"/>
+                      </svg>
+                    </div>
+                    <div style={{ transform: 'translateZ(40px)' }}>
+                      <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">Linux Unhatched Certification</h4>
+                      <span className="text-[10px] text-[#4b5563]">Cisco Networking Academy &bull; 2026</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* 4. EY GDS Internship */}
-                <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
-                  <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                      <rect x="3" y="3" width="18" height="18" rx="2" fill="#1D1D1F"/>
-                      <polygon points="12,18 18,18 18,12" fill="#FFE600"/>
-                      <text x="5" y="13" fill="#FFFFFF" fontSize="8" fontWeight="bold" fontFamily="sans-serif">EY</text>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">MERN Stack Developer Internship</h4>
-                    <span className="text-[10px] text-[#4b5563]">EY GDS & AICTE &bull; 2025</span>
+                <div
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 hover:shadow-[0_15px_30px_rgba(0,0,0,0.03)] transition-all duration-500 perspective-1000 cursor-default reveal"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  <div className="tilt-inner flex items-center gap-4 w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+                    <div style={{ transform: 'translateZ(30px)' }} className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <rect x="3" y="3" width="18" height="18" rx="2" fill="#1D1D1F"/>
+                        <polygon points="12,18 18,18 18,12" fill="#FFE600"/>
+                        <text x="5" y="13" fill="#FFFFFF" fontSize="8" fontWeight="bold" fontFamily="sans-serif">EY</text>
+                      </svg>
+                    </div>
+                    <div style={{ transform: 'translateZ(40px)' }}>
+                      <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">MERN Stack Developer Internship</h4>
+                      <span className="text-[10px] text-[#4b5563]">EY GDS & AICTE &bull; 2025</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* 5. IBM AI Certification */}
-                <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
-                  <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#0530AD]">
-                      <path d="M2 4h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">Getting Started with AI</h4>
-                    <span className="text-[10px] text-[#4b5563]">IBM &bull; 2026</span>
+                <div
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 hover:shadow-[0_15px_30px_rgba(0,0,0,0.03)] transition-all duration-500 perspective-1000 cursor-default reveal"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  <div className="tilt-inner flex items-center gap-4 w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+                    <div style={{ transform: 'translateZ(30px)' }} className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#0530AD]">
+                        <path d="M2 4h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2z" />
+                      </svg>
+                    </div>
+                    <div style={{ transform: 'translateZ(40px)' }}>
+                      <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">Getting Started with AI</h4>
+                      <span className="text-[10px] text-[#4b5563]">IBM &bull; 2026</span>
+                    </div>
                   </div>
                 </div>
 
@@ -728,7 +780,7 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* SECTION 5: Inquire / Contact */}
+        {/* SECTION 5: Inquire / Contact with 3D hover redirection cards */}
         <section id="contact" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="bg-white border border-[#e5e7eb] rounded-3xl p-8 sm:p-12 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
             <div className="max-w-xl text-left">
@@ -744,52 +796,76 @@ const App: React.FC = () => {
               </p>
             </div>
 
-            {/* Social channels grid */}
+            {/* Social channels grid with 3D hover layout */}
             <div className="flex flex-col gap-3 w-full md:w-auto max-w-sm reveal">
+              {/* 1. Email */}
               <a
                 href="mailto:vishvasaimon@gmail.com"
-                className="group flex items-center justify-between gap-6 bg-[#f8f7f4] border border-[#e5e7eb] hover:border-black/25 px-6 py-4 rounded-xl transition-all duration-300 hover:bg-white"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                className="group flex items-center justify-between gap-6 bg-[#f8f7f4] border border-[#e5e7eb] hover:border-black/25 px-6 py-4 rounded-xl transition-all duration-500 hover:bg-white perspective-1000 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
               >
-                <div className="flex items-center gap-4">
-                  <Mail className="w-5 h-5 text-neutral-500" />
-                  <div className="flex flex-col items-start">
-                    <span className="text-[9px] uppercase tracking-wider text-[#4b5563] font-bold">Email Address</span>
-                    <span className="text-xs text-[#1d1d1f] font-medium">vishvasaimon@gmail.com</span>
+                <div className="tilt-inner flex items-center justify-between w-full" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="flex items-center gap-4">
+                    <div style={{ transform: 'translateZ(25px)' }} className="w-10 h-10 bg-white border border-[#e5e7eb] rounded-lg flex items-center justify-center text-neutral-500">
+                      <Mail className="w-5 h-5" />
+                    </div>
+                    <div style={{ transform: 'translateZ(40px)' }} className="flex flex-col items-start">
+                      <span className="text-[9px] uppercase tracking-wider text-[#4b5563] font-bold">Email Address</span>
+                      <span className="text-xs text-[#1d1d1f] font-medium">vishvasaimon@gmail.com</span>
+                    </div>
                   </div>
+                  <ArrowUpRight style={{ transform: 'translateZ(30px)' }} className="w-4 h-4 text-neutral-400 group-hover:text-black transition-colors" />
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-neutral-400 group-hover:text-black transition-colors" />
               </a>
 
+              {/* 2. LinkedIn */}
               <a
                 href="https://linkedin.com/in/vishvakanna"
                 target="_blank"
                 rel="noreferrer"
-                className="group flex items-center justify-between gap-6 bg-[#f8f7f4] border border-[#e5e7eb] hover:border-black/25 px-6 py-4 rounded-xl transition-all duration-300 hover:bg-white"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                className="group flex items-center justify-between gap-6 bg-[#f8f7f4] border border-[#e5e7eb] hover:border-black/25 px-6 py-4 rounded-xl transition-all duration-500 hover:bg-white perspective-1000 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
               >
-                <div className="flex items-center gap-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-5 h-5 text-neutral-500"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                  <div className="flex flex-col items-start">
-                    <span className="text-[9px] uppercase tracking-wider text-[#4b5563] font-bold">LinkedIn Portal</span>
-                    <span className="text-xs text-[#1d1d1f] font-medium">linkedin.com/in/vishvakanna</span>
+                <div className="tilt-inner flex items-center justify-between w-full" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="flex items-center gap-4">
+                    <div style={{ transform: 'translateZ(25px)' }} className="w-10 h-10 bg-white border border-[#e5e7eb] rounded-lg flex items-center justify-center text-neutral-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-5 h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    </div>
+                    <div style={{ transform: 'translateZ(40px)' }} className="flex flex-col items-start">
+                      <span className="text-[9px] uppercase tracking-wider text-[#4b5563] font-bold">LinkedIn Portal</span>
+                      <span className="text-xs text-[#1d1d1f] font-medium">linkedin.com/in/vishvakanna</span>
+                    </div>
                   </div>
+                  <ArrowUpRight style={{ transform: 'translateZ(30px)' }} className="w-4 h-4 text-neutral-400 group-hover:text-black transition-colors" />
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-neutral-400 group-hover:text-black transition-colors" />
               </a>
 
+              {/* 3. GitHub */}
               <a
                 href="https://github.com/vishva-ux"
                 target="_blank"
                 rel="noreferrer"
-                className="group flex items-center justify-between gap-6 bg-[#f8f7f4] border border-[#e5e7eb] hover:border-black/25 px-6 py-4 rounded-xl transition-all duration-300 hover:bg-white"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                className="group flex items-center justify-between gap-6 bg-[#f8f7f4] border border-[#e5e7eb] hover:border-black/25 px-6 py-4 rounded-xl transition-all duration-500 hover:bg-white perspective-1000 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
               >
-                <div className="flex items-center gap-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-5 h-5 text-neutral-500"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
-                  <div className="flex flex-col items-start">
-                    <span className="text-[9px] uppercase tracking-wider text-[#4b5563] font-bold">GitHub Portal</span>
-                    <span className="text-xs text-[#1d1d1f] font-medium">github.com/vishva-ux</span>
+                <div className="tilt-inner flex items-center justify-between w-full" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="flex items-center gap-4">
+                    <div style={{ transform: 'translateZ(25px)' }} className="w-10 h-10 bg-white border border-[#e5e7eb] rounded-lg flex items-center justify-center text-neutral-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-5 h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
+                    </div>
+                    <div style={{ transform: 'translateZ(40px)' }} className="flex flex-col items-start">
+                      <span className="text-[9px] uppercase tracking-wider text-[#4b5563] font-bold">GitHub Portal</span>
+                      <span className="text-xs text-[#1d1d1f] font-medium">github.com/vishva-ux</span>
+                    </div>
                   </div>
+                  <ArrowUpRight style={{ transform: 'translateZ(30px)' }} className="w-4 h-4 text-neutral-400 group-hover:text-black transition-colors" />
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-neutral-400 group-hover:text-black transition-colors" />
               </a>
             </div>
           </div>
