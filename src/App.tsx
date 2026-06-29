@@ -193,22 +193,20 @@ const App: React.FC = () => {
     }
   ];
 
-  // Mouse move tilt effect handler for cards
+  // Mouse move tilt effect handler for cards (True 3D layout rotation)
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
-    const offsetX = (x / rect.width) - 0.5;
-    const offsetY = (y / rect.height) - 0.5;
-    
-    card.style.setProperty('--mouse-x', `${x}px`);
-    card.style.setProperty('--mouse-y', `${y}px`);
+    // Calculate rotation angles based on mouse offsets (capped at 12 degrees max tilt)
+    const rotateX = -((y / rect.height) - 0.5) * 24;
+    const rotateY = ((x / rect.width) - 0.5) * 24;
     
     const inner = card.querySelector('.tilt-inner') as HTMLDivElement;
     if (inner) {
-      inner.style.transform = `rotateX(${-offsetY * 8}deg) rotateY(${offsetX * 8}deg) scale3d(1.01, 1.01, 1.01)`;
+      inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
     }
   };
 
@@ -346,7 +344,7 @@ const App: React.FC = () => {
             
             {/* Left text panel */}
             <div className="lg:col-span-7 flex flex-col items-start text-left">
-              {/* Tagline (Removed Crown icon) */}
+              {/* Tagline */}
               <div className="animate-fade-up flex items-center gap-2 mb-6 opacity-0 [animation-fill-mode:forwards]">
                 <span className="font-inter text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-[#4b5563]">
                   R. VISHVA KANNA
@@ -364,7 +362,7 @@ const App: React.FC = () => {
                 A final-year student at SRM Institute of Science and Technology. I specialize in building end-to-end full-stack software applications, robust systems APIs, and automated cloud deployments.
               </p>
 
-              {/* Action buttons (Removed SRM IST badge next to button) */}
+              {/* Action buttons */}
               <div className="animate-fade-up-delay-3 flex flex-wrap items-center gap-4 sm:gap-6 mt-8 lg:mt-10 opacity-0 [animation-fill-mode:forwards] reveal">
                 <a
                   href="#work"
@@ -375,11 +373,11 @@ const App: React.FC = () => {
                 </a>
               </div>
 
-              {/* Core Stats Row */}
+              {/* Core Stats Row (Updated CGPA to 8.29) */}
               <div className="animate-fade-up-delay-4 flex flex-wrap gap-8 sm:gap-12 lg:gap-16 mt-12 lg:mt-16 opacity-0 [animation-fill-mode:forwards] reveal">
                 {[
                   { num: '+20', label: 'Systems Built' },
-                  { num: '8.26', label: 'Academic CGPA' },
+                  { num: '8.29', label: 'Academic CGPA' },
                   { num: '+19', label: 'Active Repos' },
                 ].map((stat) => (
                   <div key={stat.label} className="flex flex-col items-start reveal">
@@ -427,7 +425,7 @@ const App: React.FC = () => {
                 I specialize in building production-ready architectures, setting up continuous deployment patterns, configuring microservice observability networks, and managing database state persistence.
               </p>
 
-              {/* Skills dashboard block (Removed C++ and Bash) */}
+              {/* Skills dashboard block */}
               <div className="w-full bg-white border border-[#e5e7eb] rounded-2xl p-6 sm:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
                 <h3 className="font-semibold text-sm uppercase tracking-wider text-[#1d1d1f] mb-6 border-b border-[#e5e7eb] pb-3 reveal">
                   Technical Core Capabilities
@@ -462,7 +460,7 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Right: Capabilities blocks (Changed font colors to light black/gray) */}
+            {/* Right: Capabilities blocks */}
             <div className="lg:col-span-6 flex flex-col gap-6 lg:mt-16">
               <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-[#1d1d1f]/40 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
                 <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#1d1d1f]">
@@ -504,7 +502,7 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* SECTION 3: Filterable Project Showcase */}
+        {/* SECTION 3: Project Showcase with 3D Pop Out Hover Effects */}
         <section id="work" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
@@ -517,7 +515,7 @@ const App: React.FC = () => {
               </h2>
             </div>
 
-            {/* Filtering Tabs (keeps projects inside genres) */}
+            {/* Filtering Tabs */}
             <div className="flex flex-wrap gap-2 reveal">
               {[
                 { id: 'ai-ml', label: 'Intelligent Systems', icon: Cpu },
@@ -543,7 +541,7 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          {/* Grid display of boxes */}
+          {/* Grid display of 3D cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects
               .filter((project) => project.genre === activeGenre)
@@ -552,10 +550,11 @@ const App: React.FC = () => {
                   key={project.title}
                   onMouseMove={handleMouseMove}
                   onMouseLeave={handleMouseLeave}
-                  className="group bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col justify-between min-h-[300px] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] cursor-default perspective-1000 reveal"
+                  className="group bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col justify-between min-h-[310px] transition-all duration-500 hover:shadow-[0_30px_60px_rgba(0,0,0,0.05)] hover:border-black/20 cursor-default perspective-1000 reveal"
+                  style={{ transformStyle: 'preserve-3d' }}
                 >
-                  <div className="tilt-inner transition-transform duration-100 ease-out flex flex-col flex-grow">
-                    <div className="flex justify-between items-start mb-6">
+                  <div className="tilt-inner transition-transform duration-200 ease-out flex flex-col flex-grow" style={{ transformStyle: 'preserve-3d' }}>
+                    <div style={{ transform: 'translateZ(30px)' }} className="flex justify-between items-start mb-6">
                       <span className="text-[9px] uppercase tracking-wider text-[#4b5563] font-bold">
                         {project.genreLabel}
                       </span>
@@ -570,15 +569,15 @@ const App: React.FC = () => {
                       </a>
                     </div>
                     
-                    <h3 className="font-semibold text-lg text-[#1d1d1f] mb-3 tracking-wide leading-snug">
+                    <h3 style={{ transform: 'translateZ(45px)' }} className="font-semibold text-lg text-[#1d1d1f] mb-3 tracking-wide leading-snug">
                       {project.title}
                     </h3>
                     
-                    <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed font-light mb-6">
+                    <p style={{ transform: 'translateZ(35px)' }} className="text-xs sm:text-sm text-[#4b5563] leading-relaxed font-light mb-6">
                       {project.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-[#e5e7eb]">
+                    <div style={{ transform: 'translateZ(50px)' }} className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-[#e5e7eb]">
                       {project.tech.map((t) => (
                         <span
                           key={t}
@@ -594,7 +593,7 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* SECTION 4: Credentials (Timeline & Certifications) */}
+        {/* SECTION 4: Credentials (Timeline & Certifications) - Changed & to AND in heading */}
         <section id="credentials" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="flex flex-col items-start mb-12">
             <div className="flex items-center gap-2 mb-4 reveal">
@@ -602,7 +601,7 @@ const App: React.FC = () => {
               <span className="text-[10px] tracking-widest text-[#4b5563] font-bold uppercase">Qualifications</span>
             </div>
             <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f] reveal">
-              Education & Certifications
+              Education and Certifications
             </h2>
           </div>
 
@@ -626,7 +625,7 @@ const App: React.FC = () => {
                   <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed font-light mb-3">
                     Engineering core competencies include Operating Systems, Object-Oriented Analysis, Relational Database Management, Software Engineering, and Computer Networks.
                   </p>
-                  <span className="inline-block text-xs bg-white border border-[#e5e7eb] text-[#1d1d1f] px-3 py-1 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.01)]">CGPA: 8.26 / 10.00</span>
+                  <span className="inline-block text-xs bg-white border border-[#e5e7eb] text-[#1d1d1f] px-3 py-1 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.01)]">CGPA: 8.29 / 10.00</span>
                 </div>
 
                 <div className="relative reveal">
@@ -642,7 +641,7 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Certifications Block with Brand SVG Logos */}
+            {/* Certifications Block */}
             <div className="lg:col-span-5 reveal">
               <h3 className="font-semibold text-sm uppercase tracking-widest text-[#1d1d1f] mb-8">
                 Certifications
@@ -652,7 +651,6 @@ const App: React.FC = () => {
                 {/* 1. AWS Cloud Practitioner */}
                 <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
                   <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
-                    {/* AWS Logo smile SVG */}
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-[#FF9900]">
                       <path d="M4 14c2.5 3 6.5 3 9 0M14 11l3 3-3 3"/>
                     </svg>
@@ -666,7 +664,6 @@ const App: React.FC = () => {
                 {/* 2. DevOps on AWS */}
                 <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
                   <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
-                    {/* Simplilearn cap SVG */}
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#0A66C2]">
                       <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
                       <path d="M5 13.18v4l7 3.82 7-3.82v-4L12 17l-7-3.82z"/>
@@ -681,7 +678,6 @@ const App: React.FC = () => {
                 {/* 3. Cisco Linux Unhatched */}
                 <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
                   <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
-                    {/* Cisco vertical bridge logo */}
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#049FD9]">
                       <rect x="2" y="10" width="2" height="4" rx="0.5"/>
                       <rect x="5" y="7" width="2" height="10" rx="0.5"/>
@@ -701,7 +697,6 @@ const App: React.FC = () => {
                 {/* 4. EY GDS Internship */}
                 <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
                   <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
-                    {/* EY yellow brand card SVG */}
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                       <rect x="3" y="3" width="18" height="18" rx="2" fill="#1D1D1F"/>
                       <polygon points="12,18 18,18 18,12" fill="#FFE600"/>
@@ -717,7 +712,6 @@ const App: React.FC = () => {
                 {/* 5. IBM AI Certification */}
                 <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
                   <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
-                    {/* IBM striped block SVG */}
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#0530AD]">
                       <path d="M2 4h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2z" />
                     </svg>
