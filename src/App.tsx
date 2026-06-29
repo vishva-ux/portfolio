@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { ArrowUpRight, Award, Crown, X, Cpu, Cloud, Server, GraduationCap, Mail, Award as CertIcon } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowUpRight, Award, Crown, X, Cpu, Cloud, Server, GraduationCap, Mail } from 'lucide-react';
 
 const App: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [activeGenre, setActiveGenre] = useState<string>('ai-ml');
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const navLinks = [
     { label: 'Overview', href: '#overview' },
@@ -12,7 +13,31 @@ const App: React.FC = () => {
     { label: 'Credentials', href: '#credentials' },
   ];
 
-  // 19 repositories categorized by genre
+  // React IntersectionObserver for Scroll Reveal Animations
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -10% 0px',
+      threshold: 0.05
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, observerOptions);
+
+    const revealElements = document.querySelectorAll('.reveal');
+    revealElements.forEach((el) => observer.observe(el));
+
+    return () => {
+      revealElements.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
+  // 19 repositories categorized by genre with professional text descriptions
   const projects = [
     {
       title: "AI Village Autonomous Simulator",
@@ -168,30 +193,47 @@ const App: React.FC = () => {
     }
   ];
 
+  // Mouse move tilt effect handler
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const offsetX = (x / rect.width) - 0.5;
+    const offsetY = (y / rect.height) - 0.5;
+    
+    card.style.setProperty('--mouse-x', `${x}px`);
+    card.style.setProperty('--mouse-y', `${y}px`);
+    
+    const inner = card.querySelector('.tilt-inner') as HTMLDivElement;
+    if (inner) {
+      inner.style.transform = `rotateX(${-offsetY * 8}deg) rotateY(${offsetX * 8}deg) scale3d(1.01, 1.01, 1.01)`;
+    }
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const inner = card.querySelector('.tilt-inner') as HTMLDivElement;
+    if (inner) {
+      inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    }
+  };
+
   return (
-    <div className="relative w-full min-h-screen bg-[#070708] text-white font-inter select-none overflow-x-hidden">
+    <div ref={scrollRef} className="relative w-full min-h-screen bg-[#f8f7f4] text-[#1d1d1f] font-inter overflow-x-hidden selection:bg-[#2563eb]/10 selection:text-[#2563eb]">
       
-      {/* Background Fixed Looping Video Overlay */}
-      <div className="fixed inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#070708]/60 via-[#070708]/85 to-[#070708] z-10" />
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-35"
-        >
-          <source
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260606_154941_df1a96e1-a06f-450c-bd02-d863414cc1a0.mp4"
-            type="video/mp4"
-          />
-        </video>
+      {/* Background Liquid Soft Gradient Blurs */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#2563eb]/5 to-transparent blur-[120px]" />
+        <div className="absolute top-[40%] left-[-10%] w-[700px] h-[700px] rounded-full bg-gradient-to-br from-[#0d9488]/5 to-transparent blur-[120px]" />
+        <div className="absolute bottom-[10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#8b5cf6]/4 to-transparent blur-[120px]" />
       </div>
 
-      {/* Top Glass Navigation Header */}
-      <header className="fixed top-0 left-0 w-full z-40 px-6 sm:px-10 lg:px-16 py-5 lg:py-6 flex justify-between items-center bg-[#070708]/40 backdrop-blur-md border-b border-white/5">
+      {/* Sticky Glass Navigation Header */}
+      <header className="fixed top-0 left-0 w-full z-40 px-6 sm:px-10 lg:px-16 py-5 lg:py-6 flex justify-between items-center bg-[#f8f7f4]/80 backdrop-blur-md border-b border-[#e5e7eb]">
         <div className="flex items-center">
-          <a href="#overview" className="font-podium text-2xl sm:text-3xl font-bold uppercase tracking-wider text-white">
+          <a href="#overview" className="font-podium text-2xl sm:text-3xl font-bold uppercase tracking-wider text-[#1d1d1f] hover:opacity-85 transition-opacity">
             VISHVA
           </a>
         </div>
@@ -202,7 +244,7 @@ const App: React.FC = () => {
             <a
               key={link.label}
               href={link.href}
-              className="text-xs uppercase tracking-widest text-white/80 hover:text-white transition-colors duration-300 font-semibold"
+              className="text-xs uppercase tracking-widest text-[#4b5563] hover:text-[#1d1d1f] transition-colors duration-300 font-semibold"
             >
               {link.label}
             </a>
@@ -213,7 +255,7 @@ const App: React.FC = () => {
         <div className="hidden md:block">
           <a
             href="#contact"
-            className="group inline-flex items-center gap-2 border border-white/20 hover:border-white/50 px-5 py-2.5 text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:bg-white/5"
+            className="group inline-flex items-center gap-2 border border-[#1d1d1f]/20 hover:border-[#1d1d1f]/50 px-5 py-2.5 text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:bg-[#1d1d1f]/5"
           >
             GET IN TOUCH
             <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -226,25 +268,25 @@ const App: React.FC = () => {
           className="flex md:hidden flex-col justify-between items-end w-6 h-4 group cursor-pointer focus:outline-none"
           aria-label="Open Navigation Menu"
         >
-          <span className="w-6 h-0.5 bg-white transition-all duration-300" />
-          <span className="w-6 h-0.5 bg-white transition-all duration-300" />
-          <span className="w-4 h-0.5 bg-white transition-all duration-300 group-hover:w-6" />
+          <span className="w-6 h-0.5 bg-[#1d1d1f] transition-all duration-300" />
+          <span className="w-6 h-0.5 bg-[#1d1d1f] transition-all duration-300" />
+          <span className="w-4 h-0.5 bg-[#1d1d1f] transition-all duration-300 group-hover:w-6" />
         </button>
       </header>
 
       {/* Fullscreen Mobile Navigation Menu */}
       <div
-        className={`fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between px-6 sm:px-10 py-6 transition-all duration-500 ${
+        className={`fixed inset-0 z-50 bg-[#f8f7f4]/98 backdrop-blur-md flex flex-col justify-between px-6 sm:px-10 py-6 transition-all duration-500 ${
           menuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
         }`}
       >
         <div className="flex justify-between items-center w-full">
-          <span className="font-podium text-2xl sm:text-3xl font-bold uppercase tracking-wider text-white">
+          <span className="font-podium text-2xl sm:text-3xl font-bold uppercase tracking-wider text-[#1d1d1f]">
             VISHVA
           </span>
           <button
             onClick={() => setMenuOpen(false)}
-            className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:border-white/30 transition-colors text-white"
+            className="w-10 h-10 flex items-center justify-center rounded-full border border-black/10 hover:border-black/20 transition-colors text-black"
             aria-label="Close Navigation Menu"
           >
             <X className="w-5 h-5" />
@@ -257,7 +299,7 @@ const App: React.FC = () => {
               key={link.label}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="font-podium text-4xl sm:text-5xl font-bold uppercase tracking-wider text-white hover:text-neutral-300 transition-colors duration-300"
+              className="font-podium text-4xl sm:text-5xl font-bold uppercase tracking-wider text-[#1d1d1f] hover:text-[#4b5563] transition-colors duration-300"
               style={{
                 transitionDelay: `${idx * 80 + 100}ms`,
                 transform: menuOpen ? 'translateY(0)' : 'translateY(20px)',
@@ -274,7 +316,7 @@ const App: React.FC = () => {
           <a
             href="#contact"
             onClick={() => setMenuOpen(false)}
-            className="group w-full max-w-xs justify-center inline-flex items-center gap-2 border border-white/20 hover:border-white/50 px-6 py-4 text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:bg-white/10"
+            className="group w-full max-w-xs justify-center inline-flex items-center gap-2 border border-black/20 hover:border-black/40 px-6 py-4 text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:bg-black/5"
             style={{
               transitionDelay: `${navLinks.length * 80 + 100}ms`,
               transform: menuOpen ? 'translateY(0)' : 'translateY(20px)',
@@ -291,50 +333,48 @@ const App: React.FC = () => {
       {/* Main Containers */}
       <div className="relative z-20 w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 pt-28">
         
-        {/* SECTION 1: Fullscreen Hero Page (Overview) */}
-        <section id="overview" className="min-h-[90vh] flex flex-col justify-center py-12">
+        {/* SECTION 1: Editorial Landing Page (Overview) */}
+        <section id="overview" className="min-h-[85vh] flex flex-col justify-center py-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
             {/* Left text panel */}
             <div className="lg:col-span-7 flex flex-col items-start text-left">
               {/* Tagline */}
               <div className="animate-fade-up flex items-center gap-2 mb-6 opacity-0 [animation-fill-mode:forwards]">
-                <Crown className="w-4 h-4 text-white/70" />
-                <span className="font-inter text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-white/70">
+                <Crown className="w-4 h-4 text-[#4b5563]" />
+                <span className="font-inter text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-[#4b5563]">
                   R. VISHVA KANNA &bull; software engineer
                 </span>
               </div>
 
-              {/* Bold Hero Header */}
-              <h1 className="animate-fade-up-delay-1 font-podium text-white uppercase leading-[0.92] tracking-tight text-[clamp(2.6rem,7.5vw,6.5rem)] mb-6 lg:mb-8 opacity-0 [animation-fill-mode:forwards]">
-                Design.<br />
-                Disrupt.<br />
-                Develop.
+              {/* Bold Greeting Header (no dot after Vishva) */}
+              <h1 className="animate-fade-up-delay-1 font-podium text-[#1d1d1f] uppercase leading-[0.92] tracking-tight text-[clamp(2.6rem,7.5vw,6.5rem)] mb-6 lg:mb-8 opacity-0 [animation-fill-mode:forwards]">
+                Hello,<br />
+                I'm Vishva
               </h1>
 
-              {/* Descriptive Intro subtext */}
-              <p className="animate-fade-up-delay-2 font-inter text-sm sm:text-base text-white/70 leading-relaxed max-w-lg opacity-0 [animation-fill-mode:forwards] font-light">
-                I build high-performance systems and automated cloud infrastructure. 
-                Architectures that don't just run — <strong className="font-bold text-white">they scale.</strong>
+              {/* Lead text */}
+              <p className="animate-fade-up-delay-2 font-inter text-sm sm:text-base text-[#4b5563] leading-relaxed max-w-lg opacity-0 [animation-fill-mode:forwards] font-light">
+                A final-year Computer Science & Engineering student at SRM Institute of Science and Technology. I specialize in building end-to-end full-stack applications, robust systems APIs, and automated cloud infrastructure.
               </p>
 
-              {/* Action items */}
+              {/* Action buttons */}
               <div className="animate-fade-up-delay-3 flex flex-wrap items-center gap-4 sm:gap-6 mt-8 lg:mt-10 opacity-0 [animation-fill-mode:forwards]">
                 <a
                   href="#work"
-                  className="group inline-flex items-center gap-2 bg-white text-black hover:bg-neutral-200 px-6 sm:px-8 py-3.5 sm:py-4 text-[11px] sm:text-xs font-bold tracking-widest uppercase transition-colors duration-300 rounded-full"
+                  className="group inline-flex items-center gap-2 bg-[#1d1d1f] text-white hover:bg-neutral-800 px-6 sm:px-8 py-3.5 sm:py-4 text-[11px] sm:text-xs font-bold tracking-widest uppercase transition-colors duration-300 rounded-full"
                 >
                   SEE MY WORK
                   <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </a>
 
-                <div className="hidden sm:flex items-center gap-3 border-l border-white/10 pl-6 py-1">
-                  <Award className="w-8 h-8 text-white/50" />
+                <div className="hidden sm:flex items-center gap-3 border-l border-black/10 pl-6 py-1">
+                  <Award className="w-8 h-8 text-[#4b5563]/60" />
                   <div className="flex flex-col text-left">
-                    <span className="text-[10px] tracking-widest text-white/60 font-semibold uppercase">
+                    <span className="text-[10px] tracking-widest text-[#4b5563] font-semibold uppercase">
                       SRM IST
                     </span>
-                    <span className="text-[10px] tracking-widest text-white/60 font-semibold uppercase">
+                    <span className="text-[10px] tracking-widest text-[#4b5563]/80 font-semibold uppercase">
                       CSE Final Year
                     </span>
                   </div>
@@ -349,10 +389,10 @@ const App: React.FC = () => {
                   { num: '+19', label: 'Active Repos' },
                 ].map((stat) => (
                   <div key={stat.label} className="flex flex-col items-start">
-                    <span className="font-inter text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
+                    <span className="font-inter text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#1d1d1f]">
                       {stat.num}
                     </span>
-                    <span className="font-inter text-[9px] sm:text-xs font-medium tracking-widest uppercase text-white/50 mt-1">
+                    <span className="font-inter text-[9px] sm:text-xs font-medium tracking-widest uppercase text-[#4b5563] mt-1">
                       {stat.label}
                     </span>
                   </div>
@@ -361,12 +401,12 @@ const App: React.FC = () => {
             </div>
 
             {/* Right Photo Column - Floating cutout photo aligned bottom right with no borders */}
-            <div className="lg:col-span-5 flex justify-center items-end relative h-[380px] sm:h-[480px] lg:h-[600px] w-full mt-8 lg:mt-0">
-              <div className="absolute inset-0 bg-gradient-to-t from-[#070708] via-transparent to-transparent z-10 pointer-events-none" />
+            <div className="lg:col-span-5 flex justify-center items-end relative h-[380px] sm:h-[480px] lg:h-[580px] w-full mt-8 lg:mt-0">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#f8f7f4] via-transparent to-transparent z-10 pointer-events-none" />
               <img
                 src="images/profile.png"
                 alt="R. Vishva Kanna"
-                className="max-h-full max-w-full object-contain filter drop-shadow-[0_20px_50px_rgba(37,99,235,0.15)] z-0"
+                className="max-h-full max-w-full object-contain filter drop-shadow-[0_20px_50px_rgba(37,99,235,0.08)] z-0"
               />
             </div>
 
@@ -374,53 +414,53 @@ const App: React.FC = () => {
         </section>
 
         {/* SECTION 2: About Me & Core Capabilities */}
-        <section id="about" className="py-24 border-t border-white/5">
+        <section id="about" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             
             {/* Left: Biography description */}
             <div className="lg:col-span-6 flex flex-col items-start">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-1.5 h-1.5 bg-teal-500 rounded-full" />
-                <span className="text-[10px] tracking-widest text-teal-400 font-bold uppercase">Biography</span>
+                <div className="w-1.5 h-1.5 bg-[#0d9488] rounded-full" />
+                <span className="text-[10px] tracking-widest text-[#0d9488] font-bold uppercase">Biography</span>
               </div>
-              <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-white mb-8">
+              <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f] mb-8">
                 About Me
               </h2>
-              <p className="text-sm sm:text-base text-white/70 leading-relaxed font-light mb-6">
+              <p className="text-sm sm:text-base text-[#4b5563] leading-relaxed font-light mb-6">
                 My engineering focus lies at the convergence of full-stack software development, automated DevOps pipelines, and cloud reliability engineering (SRE). I construct clean, testable codebases and configure containerized, elastic application environments.
               </p>
-              <p className="text-sm sm:text-base text-white/70 leading-relaxed font-light mb-8">
+              <p className="text-sm sm:text-base text-[#4b5563] leading-relaxed font-light mb-8">
                 I specialize in building production-ready architectures, setting up continuous deployment patterns, configuring microservice observability networks, and managing database state persistence.
               </p>
 
               {/* Skills dashboard block */}
-              <div className="w-full bg-white/[0.02] border border-white/5 rounded-2xl p-6 sm:p-8">
-                <h3 className="font-semibold text-sm uppercase tracking-wider text-white mb-6 border-b border-white/5 pb-3">
+              <div className="w-full bg-white border border-[#e5e7eb] rounded-2xl p-6 sm:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.02)]">
+                <h3 className="font-semibold text-sm uppercase tracking-wider text-[#1d1d1f] mb-6 border-b border-[#e5e7eb] pb-3">
                   Technical Core Capabilities
                 </h3>
                 
                 <div className="space-y-6">
                   <div>
-                    <h4 className="text-[10px] uppercase font-bold tracking-widest text-white/50 mb-3">Languages</h4>
+                    <h4 className="text-[10px] uppercase font-bold tracking-widest text-[#4b5563]/70 mb-3">Languages</h4>
                     <div className="flex flex-wrap gap-2">
                       {['Python', 'SQL', 'JavaScript', 'TypeScript', 'C++', 'Bash'].map(t => (
-                        <span key={t} className="text-xs px-3.5 py-1.5 bg-white/5 border border-white/10 rounded-lg text-white/90">{t}</span>
+                        <span key={t} className="text-xs px-3.5 py-1.5 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg text-[#1d1d1f] font-medium">{t}</span>
                       ))}
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-[10px] uppercase font-bold tracking-widest text-white/50 mb-3">Cloud & DevOps</h4>
+                    <h4 className="text-[10px] uppercase font-bold tracking-widest text-[#4b5563]/70 mb-3">Cloud & DevOps</h4>
                     <div className="flex flex-wrap gap-2">
                       {['Docker', 'Kubernetes', 'AWS', 'Terraform', 'GitHub Actions', 'Jenkins', 'Prometheus', 'Grafana'].map(t => (
-                        <span key={t} className="text-xs px-3.5 py-1.5 bg-white/5 border border-white/10 rounded-lg text-white/90">{t}</span>
+                        <span key={t} className="text-xs px-3.5 py-1.5 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg text-[#1d1d1f] font-medium">{t}</span>
                       ))}
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-[10px] uppercase font-bold tracking-widest text-white/50 mb-3">Frameworks & DBs</h4>
+                    <h4 className="text-[10px] uppercase font-bold tracking-widest text-[#4b5563]/70 mb-3">Frameworks & DBs</h4>
                     <div className="flex flex-wrap gap-2">
                       {['React.js', 'Next.js', 'FastAPI', 'Flask', 'PostgreSQL', 'MySQL', 'MongoDB', 'PyTorch'].map(t => (
-                        <span key={t} className="text-xs px-3.5 py-1.5 bg-white/5 border border-white/10 rounded-lg text-white/90">{t}</span>
+                        <span key={t} className="text-xs px-3.5 py-1.5 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg text-[#1d1d1f] font-medium">{t}</span>
                       ))}
                     </div>
                   </div>
@@ -428,39 +468,39 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Right: Asymmetrical floating tactile blocks */}
+            {/* Right: Capabilities blocks */}
             <div className="lg:col-span-6 flex flex-col gap-6 lg:mt-16">
-              <div className="bg-white/[0.01] border border-white/5 p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-teal-500/30 transition-colors duration-300">
-                <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-teal-400">
+              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-[#0d9488]/40 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)]">
+                <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#0d9488]">
                   <Cpu className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg text-white mb-2">Cognitive Automation</h3>
-                  <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
+                  <h3 className="font-semibold text-lg text-[#1d1d1f] mb-2">Cognitive Automation</h3>
+                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed">
                     Engineering autonomous system agents using local LLMs, claim vector indices, predictive analytics, and self-hosted model streams.
                   </p>
                 </div>
               </div>
 
-              <div className="bg-white/[0.01] border border-white/5 p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-blue-500/30 transition-colors duration-300">
-                <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-blue-400">
+              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-[#2563eb]/40 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)]">
+                <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#2563eb]">
                   <Cloud className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg text-white mb-2">Kubernetes & Infrastructure</h3>
-                  <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
+                  <h3 className="font-semibold text-lg text-[#1d1d1f] mb-2">Kubernetes & Infrastructure</h3>
+                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed">
                     Automating infrastructure deployments, building secure GitOps pipelines with Helm/ArgoCD, and configuring telemetry dashboards.
                   </p>
                 </div>
               </div>
 
-              <div className="bg-white/[0.01] border border-white/5 p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-white/20 transition-colors duration-300">
-                <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white/80">
+              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-black/20 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)]">
+                <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#1d1d1f]">
                   <Server className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg text-white mb-2">Scalable Systems Architecture</h3>
-                  <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
+                  <h3 className="font-semibold text-lg text-[#1d1d1f] mb-2">Scalable Systems Architecture</h3>
+                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed">
                     Building robust APIs using Python (FastAPI/Flask) and Node.js, mapping relational schemas, and establishing reliable system protocols.
                   </p>
                 </div>
@@ -471,14 +511,14 @@ const App: React.FC = () => {
         </section>
 
         {/* SECTION 3: Filterable Project Showcase */}
-        <section id="work" className="py-24 border-t border-white/5">
+        <section id="work" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
-                <span className="text-[10px] tracking-widest text-blue-400 font-bold uppercase">Engineering Work</span>
+                <div className="w-1.5 h-1.5 bg-[#2563eb] rounded-full" />
+                <span className="text-[10px] tracking-widest text-[#2563eb] font-bold uppercase">Engineering Work</span>
               </div>
-              <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-white">
+              <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f]">
                 Selected Projects
               </h2>
             </div>
@@ -497,8 +537,8 @@ const App: React.FC = () => {
                     onClick={() => setActiveGenre(tab.id)}
                     className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest border transition-all cursor-pointer ${
                       activeGenre === tab.id
-                        ? 'bg-white text-black border-white'
-                        : 'bg-white/5 border-white/5 text-white/60 hover:text-white hover:border-white/15'
+                        ? 'bg-[#1d1d1f] text-white border-black'
+                        : 'bg-white border-[#e5e7eb] text-[#4b5563] hover:text-[#1d1d1f] hover:border-[#4b5563]/30'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -516,42 +556,44 @@ const App: React.FC = () => {
               .map((project) => (
                 <div
                   key={project.title}
-                  className="bg-white/[0.02] border border-white/5 hover:border-white/15 rounded-2xl p-6 flex flex-col justify-between min-h-[300px] hover:translate-y-[-4px] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  className="group bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col justify-between min-h-[300px] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] cursor-default perspective-1000"
                 >
-                  <div>
+                  <div className="tilt-inner transition-transform duration-100 ease-out flex flex-col flex-grow">
                     <div className="flex justify-between items-start mb-6">
-                      <span className="text-[9px] uppercase tracking-wider text-teal-400 font-bold">
+                      <span className="text-[9px] uppercase tracking-wider text-[#0d9488] font-bold">
                         {project.genreLabel}
                       </span>
                       <a
                         href={project.github}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-white/40 hover:text-white transition-colors"
+                        className="text-neutral-400 hover:text-black transition-colors"
                         aria-label="GitHub Repository"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-5 h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
                       </a>
                     </div>
                     
-                    <h3 className="font-semibold text-lg text-white mb-3 tracking-wide leading-snug">
+                    <h3 className="font-semibold text-lg text-[#1d1d1f] mb-3 tracking-wide leading-snug">
                       {project.title}
                     </h3>
                     
-                    <p className="text-xs sm:text-sm text-white/60 leading-relaxed font-light mb-6">
+                    <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed font-light mb-6">
                       {project.description}
                     </p>
-                  </div>
 
-                  <div className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-white/5">
-                    {project.tech.map((t) => (
-                      <span
-                        key={t}
-                        className="text-[9px] font-bold uppercase tracking-wider bg-white/5 border border-white/5 text-white/70 px-2.5 py-1 rounded"
-                      >
-                        {t}
-                      </span>
-                    ))}
+                    <div className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-[#e5e7eb]">
+                      {project.tech.map((t) => (
+                        <span
+                          key={t}
+                          className="text-[9px] font-bold uppercase tracking-wider bg-[#f8f7f4] border border-[#e5e7eb] text-[#4b5563] px-2.5 py-1 rounded"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -559,13 +601,13 @@ const App: React.FC = () => {
         </section>
 
         {/* SECTION 4: Credentials (Timeline & Certifications) */}
-        <section id="credentials" className="py-24 border-t border-white/5">
+        <section id="credentials" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="flex flex-col items-start mb-12">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full" />
-              <span className="text-[10px] tracking-widest text-purple-400 font-bold uppercase">Qualifications</span>
+              <div className="w-1.5 h-1.5 bg-[#8b5cf6] rounded-full" />
+              <span className="text-[10px] tracking-widest text-[#8b5cf6] font-bold uppercase">Qualifications</span>
             </div>
-            <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-white">
+            <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f]">
               Education & Certifications
             </h2>
           </div>
@@ -574,42 +616,42 @@ const App: React.FC = () => {
             
             {/* Timeline Panel */}
             <div className="lg:col-span-7">
-              <h3 className="font-semibold text-sm uppercase tracking-widest text-white mb-8 flex items-center gap-3">
-                <GraduationCap className="w-5 h-5 text-teal-400" /> Academic Timeline
+              <h3 className="font-semibold text-sm uppercase tracking-widest text-[#1d1d1f] mb-8 flex items-center gap-3">
+                <GraduationCap className="w-5 h-5 text-[#0d9488]" /> Academic Timeline
               </h3>
               
-              <div className="border-l border-white/10 pl-6 ml-3 space-y-12">
+              <div className="border-l border-[#e5e7eb] pl-6 ml-3 space-y-12">
                 <div className="relative">
-                  <div className="absolute w-3 h-3 bg-teal-500 rounded-full left-[-32.5px] top-1.5 border border-[#070708]" />
+                  <div className="absolute w-3 h-3 bg-[#0d9488] rounded-full left-[-32.5px] top-1.5 border border-[#f8f7f4]" />
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-xs text-white font-bold">2023 - 2027</span>
-                    <span className="text-[9px] uppercase tracking-wider font-bold bg-teal-500/10 border border-teal-500/20 text-teal-400 px-2 py-0.5 rounded">Final Year</span>
+                    <span className="text-xs text-[#1d1d1f] font-bold">2023 - 2027</span>
+                    <span className="text-[9px] uppercase tracking-wider font-bold bg-[#0d9488]/10 border border-[#0d9488]/20 text-[#0d9488] px-2 py-0.5 rounded">Final Year</span>
                   </div>
-                  <h4 className="font-bold text-lg text-white mb-1">SRM Institute of Science and Technology</h4>
-                  <p className="text-xs text-white/50 font-medium mb-3">B.Tech in Computer Science & Engineering</p>
-                  <p className="text-xs sm:text-sm text-white/60 leading-relaxed font-light mb-3">
-                    Core subjects include Operating Systems, Object-Oriented Analysis, Relational Database Management, Software Engineering, and Computer Networks.
+                  <h4 className="font-bold text-lg text-[#1d1d1f] mb-1">SRM Institute of Science and Technology</h4>
+                  <p className="text-xs text-[#4b5563] font-medium mb-3">B.Tech in Computer Science & Engineering</p>
+                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed font-light mb-3">
+                    Engineering core competencies include Operating Systems, Object-Oriented Analysis, Relational Database Management, Software Engineering, and Computer Networks.
                   </p>
-                  <span className="inline-block text-xs bg-white/5 border border-white/10 text-white/95 px-3 py-1 rounded-lg">CGPA: 8.26 / 10.00</span>
+                  <span className="inline-block text-xs bg-white border border-[#e5e7eb] text-[#1d1d1f] px-3 py-1 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.01)]">CGPA: 8.26 / 10.00</span>
                 </div>
 
                 <div className="relative">
-                  <div className="absolute w-3 h-3 bg-white/20 rounded-full left-[-32.5px] top-1.5 border border-[#070708]" />
+                  <div className="absolute w-3 h-3 bg-neutral-300 rounded-full left-[-32.5px] top-1.5 border border-[#f8f7f4]" />
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-xs text-white/60 font-bold">2021 - 2023</span>
-                    <span className="text-[9px] uppercase tracking-wider font-bold bg-white/5 border border-white/5 text-white/50 px-2 py-0.5 rounded">Schooling</span>
+                    <span className="text-xs text-[#4b5563] font-bold">2021 - 2023</span>
+                    <span className="text-[9px] uppercase tracking-wider font-bold bg-[#f8f7f4] border border-[#e5e7eb] text-[#4b5563] px-2 py-0.5 rounded">Schooling</span>
                   </div>
-                  <h4 className="font-bold text-lg text-white/90 mb-1">Kendriya Vidyalaya, Thanjavur</h4>
-                  <p className="text-xs text-white/50 font-medium mb-3">All India Senior School Certificate Examination (CBSE)</p>
-                  <span className="inline-block text-xs bg-white/5 border border-white/10 text-white/80 px-3 py-1 rounded-lg">Percentage: 71.8%</span>
+                  <h4 className="font-bold text-lg text-[#1d1d1f]/90 mb-1">Kendriya Vidyalaya, Thanjavur</h4>
+                  <p className="text-xs text-[#4b5563] font-medium mb-3">All India Senior School Certificate Examination (CBSE)</p>
+                  <span className="inline-block text-xs bg-white border border-[#e5e7eb] text-[#4b5563] px-3 py-1 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.01)]">Percentage: 71.8%</span>
                 </div>
               </div>
             </div>
 
             {/* Certifications Block */}
             <div className="lg:col-span-5">
-              <h3 className="font-semibold text-sm uppercase tracking-widest text-white mb-8 flex items-center gap-3">
-                <CertIcon className="w-5 h-5 text-blue-400" /> Certifications
+              <h3 className="font-semibold text-sm uppercase tracking-widest text-[#1d1d1f] mb-8 flex items-center gap-3">
+                <Award className="w-5 h-5 text-[#2563eb]" /> Certifications
               </h3>
 
               <div className="space-y-3.5">
@@ -620,13 +662,13 @@ const App: React.FC = () => {
                   { name: 'MERN Stack Developer Internship', issuer: 'EY GDS & AICTE', year: '2025' },
                   { name: 'Getting Started with AI', issuer: 'IBM', year: '2026' },
                 ].map((cert) => (
-                  <div key={cert.name} className="flex items-center gap-4 bg-white/[0.01] border border-white/5 hover:border-white/15 p-4 rounded-xl transition-all duration-300">
-                    <div className="w-10 h-10 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-blue-400">
-                      <CertIcon className="w-5 h-5" />
+                  <div key={cert.name} className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-[#2563eb]/20 transition-all duration-300">
+                    <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center text-[#2563eb]">
+                      <Award className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold text-white mb-0.5">{cert.name}</h4>
-                      <span className="text-[10px] text-white/50">{cert.issuer} &bull; {cert.year}</span>
+                      <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">{cert.name}</h4>
+                      <span className="text-[10px] text-[#4b5563]">{cert.issuer} &bull; {cert.year}</span>
                     </div>
                   </div>
                 ))}
@@ -637,17 +679,17 @@ const App: React.FC = () => {
         </section>
 
         {/* SECTION 5: Inquire / Contact */}
-        <section id="contact" className="py-24 border-t border-white/5">
-          <div className="bg-white/[0.01] border border-white/5 rounded-3xl p-8 sm:p-12 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-12">
+        <section id="contact" className="py-24 border-t border-[#e5e7eb] reveal">
+          <div className="bg-white border border-[#e5e7eb] rounded-3xl p-8 sm:p-12 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
             <div className="max-w-xl text-left">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full" />
-                <span className="text-[10px] tracking-widest text-yellow-400 font-bold uppercase">Let's Collaborate</span>
+                <span className="text-[10px] tracking-widest text-yellow-600 font-bold uppercase">Let's Collaborate</span>
               </div>
-              <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-white mb-6">
+              <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f] mb-6">
                 Get In Touch
               </h2>
-              <p className="text-xs sm:text-sm text-white/60 leading-relaxed font-light">
+              <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed font-light">
                 I am seeking full-time software engineering roles, developer internships, or technical collaborations. Drop me a line and let's construct something durable.
               </p>
             </div>
@@ -656,61 +698,61 @@ const App: React.FC = () => {
             <div className="flex flex-col gap-3 w-full md:w-auto max-w-sm">
               <a
                 href="mailto:vishvasaimon@gmail.com"
-                className="group flex items-center justify-between gap-6 bg-white/5 border border-white/5 hover:border-white/15 px-6 py-4 rounded-xl transition-all duration-300 hover:bg-white/10"
+                className="group flex items-center justify-between gap-6 bg-[#f8f7f4] border border-[#e5e7eb] hover:border-black/25 px-6 py-4 rounded-xl transition-all duration-300 hover:bg-white"
               >
                 <div className="flex items-center gap-4">
-                  <Mail className="w-5 h-5 text-white/70" />
+                  <Mail className="w-5 h-5 text-neutral-500" />
                   <div className="flex flex-col items-start">
-                    <span className="text-[9px] uppercase tracking-wider text-white/50 font-bold">Email Address</span>
-                    <span className="text-xs text-white font-medium">vishvasaimon@gmail.com</span>
+                    <span className="text-[9px] uppercase tracking-wider text-[#4b5563] font-bold">Email Address</span>
+                    <span className="text-xs text-[#1d1d1f] font-medium">vishvasaimon@gmail.com</span>
                   </div>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-neutral-400 group-hover:text-black transition-colors" />
               </a>
 
               <a
                 href="https://linkedin.com/in/vishvakanna"
                 target="_blank"
                 rel="noreferrer"
-                className="group flex items-center justify-between gap-6 bg-white/5 border border-white/5 hover:border-white/15 px-6 py-4 rounded-xl transition-all duration-300 hover:bg-white/10"
+                className="group flex items-center justify-between gap-6 bg-[#f8f7f4] border border-[#e5e7eb] hover:border-black/25 px-6 py-4 rounded-xl transition-all duration-300 hover:bg-white"
               >
                 <div className="flex items-center gap-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-5 h-5 text-white/70"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-5 h-5 text-neutral-500"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                   <div className="flex flex-col items-start">
-                    <span className="text-[9px] uppercase tracking-wider text-white/50 font-bold">LinkedIn Portal</span>
-                    <span className="text-xs text-white font-medium">linkedin.com/in/vishvakanna</span>
+                    <span className="text-[9px] uppercase tracking-wider text-[#4b5563] font-bold">LinkedIn Portal</span>
+                    <span className="text-xs text-[#1d1d1f] font-medium">linkedin.com/in/vishvakanna</span>
                   </div>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-neutral-400 group-hover:text-black transition-colors" />
               </a>
 
               <a
                 href="https://github.com/vishva-ux"
                 target="_blank"
                 rel="noreferrer"
-                className="group flex items-center justify-between gap-6 bg-white/5 border border-white/5 hover:border-white/15 px-6 py-4 rounded-xl transition-all duration-300 hover:bg-white/10"
+                className="group flex items-center justify-between gap-6 bg-[#f8f7f4] border border-[#e5e7eb] hover:border-black/25 px-6 py-4 rounded-xl transition-all duration-300 hover:bg-white"
               >
                 <div className="flex items-center gap-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-5 h-5 text-white/70"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-5 h-5 text-neutral-500"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
                   <div className="flex flex-col items-start">
-                    <span className="text-[9px] uppercase tracking-wider text-white/50 font-bold">GitHub Portal</span>
-                    <span className="text-xs text-white font-medium">github.com/vishva-ux</span>
+                    <span className="text-[9px] uppercase tracking-wider text-[#4b5563] font-bold">GitHub Portal</span>
+                    <span className="text-xs text-[#1d1d1f] font-medium">github.com/vishva-ux</span>
                   </div>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-neutral-400 group-hover:text-black transition-colors" />
               </a>
             </div>
           </div>
         </section>
 
         {/* Footer info */}
-        <footer className="py-12 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-6 mt-12">
-          <span className="text-[10px] tracking-widest text-white/50 uppercase">
+        <footer className="py-12 border-t border-[#e5e7eb] flex flex-col sm:flex-row justify-between items-center gap-6 mt-12">
+          <span className="text-[10px] tracking-widest text-[#4b5563] uppercase">
             &copy; 2026 R. VISHVA KANNA. All rights reserved.
           </span>
           <div className="flex gap-4">
-            <a href="https://github.com/vishva-ux" target="_blank" rel="noreferrer" className="text-white/40 hover:text-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-4 h-4"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg></a>
-            <a href="https://linkedin.com/in/vishvakanna" target="_blank" rel="noreferrer" className="text-white/40 hover:text-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-4 h-4"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+            <a href="https://github.com/vishva-ux" target="_blank" rel="noreferrer" className="text-neutral-400 hover:text-black transition-colors"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-4 h-4"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg></a>
+            <a href="https://linkedin.com/in/vishvakanna" target="_blank" rel="noreferrer" className="text-neutral-400 hover:text-black transition-colors"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-4 h-4"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
           </div>
         </footer>
 
