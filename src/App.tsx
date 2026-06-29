@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowUpRight, Award, Crown, X, Cpu, Cloud, Server, GraduationCap, Mail } from 'lucide-react';
+import { ArrowUpRight, X, Cpu, Cloud, Server, Award, Mail } from 'lucide-react';
 
 const App: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -17,7 +17,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '0px 0px -10% 0px',
+      rootMargin: '0px 0px -8% 0px',
       threshold: 0.05
     };
 
@@ -37,7 +37,7 @@ const App: React.FC = () => {
     };
   }, []);
 
-  // 19 categorized repositories with professional descriptions
+  // Categorized repositories
   const projects = [
     {
       title: "AI Village Autonomous Simulator",
@@ -225,9 +225,9 @@ const App: React.FC = () => {
       
       {/* Background Liquid Soft Gradient Blurs */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#2563eb]/5 to-transparent blur-[120px]" />
-        <div className="absolute top-[40%] left-[-10%] w-[700px] h-[700px] rounded-full bg-gradient-to-br from-[#0d9488]/5 to-transparent blur-[120px]" />
-        <div className="absolute bottom-[10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#8b5cf6]/4 to-transparent blur-[120px]" />
+        <div className="absolute top-[10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#2563eb]/3 to-transparent blur-[120px]" />
+        <div className="absolute top-[40%] left-[-10%] w-[700px] h-[700px] rounded-full bg-gradient-to-br from-[#2563eb]/2 to-transparent blur-[120px]" />
+        <div className="absolute bottom-[10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#2563eb]/2 to-transparent blur-[120px]" />
       </div>
 
       {/* Fixed Background Scenery Image */}
@@ -346,27 +346,26 @@ const App: React.FC = () => {
             
             {/* Left text panel */}
             <div className="lg:col-span-7 flex flex-col items-start text-left">
-              {/* Tagline */}
+              {/* Tagline (Removed Crown icon) */}
               <div className="animate-fade-up flex items-center gap-2 mb-6 opacity-0 [animation-fill-mode:forwards]">
-                <Crown className="w-4 h-4 text-[#4b5563]" />
                 <span className="font-inter text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-[#4b5563]">
-                  R. VISHVA KANNA &bull; software engineer
+                  R. VISHVA KANNA
                 </span>
               </div>
 
               {/* Bold Greeting Header (Im Vishva - no apostrophe to avoid DEMO watermark) */}
-              <h1 className="animate-fade-up-delay-1 font-podium text-[#1d1d1f] uppercase leading-[0.92] tracking-tight text-[clamp(2.6rem,7.5vw,6.5rem)] mb-6 lg:mb-8 opacity-0 [animation-fill-mode:forwards]">
+              <h1 className="animate-fade-up-delay-1 font-podium text-[#1d1d1f] uppercase leading-[0.92] tracking-tight text-[clamp(2.6rem,7.5vw,6.5rem)] mb-6 lg:mb-8 opacity-0 [animation-fill-mode:forwards] reveal">
                 Hello,<br />
                 Im Vishva
               </h1>
 
-              {/* Lead text */}
-              <p className="animate-fade-up-delay-2 font-inter text-sm sm:text-base text-[#4b5563] leading-relaxed max-w-lg opacity-0 [animation-fill-mode:forwards] font-light">
-                A final-year Computer Science & Engineering student at SRM Institute of Science and Technology. I specialize in building end-to-end full-stack applications, robust systems APIs, and automated cloud infrastructure.
+              {/* Lead text (Removed specific engineering references) */}
+              <p className="animate-fade-up-delay-2 font-inter text-sm sm:text-base text-[#4b5563] leading-relaxed max-w-lg opacity-0 [animation-fill-mode:forwards] font-light reveal">
+                A final-year student at SRM Institute of Science and Technology. I specialize in building end-to-end full-stack software applications, robust systems APIs, and automated cloud deployments.
               </p>
 
-              {/* Action buttons */}
-              <div className="animate-fade-up-delay-3 flex flex-wrap items-center gap-4 sm:gap-6 mt-8 lg:mt-10 opacity-0 [animation-fill-mode:forwards]">
+              {/* Action buttons (Removed SRM IST badge next to button) */}
+              <div className="animate-fade-up-delay-3 flex flex-wrap items-center gap-4 sm:gap-6 mt-8 lg:mt-10 opacity-0 [animation-fill-mode:forwards] reveal">
                 <a
                   href="#work"
                   className="group inline-flex items-center gap-2 bg-[#1d1d1f] text-white hover:bg-neutral-800 px-6 sm:px-8 py-3.5 sm:py-4 text-[11px] sm:text-xs font-bold tracking-widest uppercase transition-colors duration-300 rounded-full"
@@ -374,28 +373,16 @@ const App: React.FC = () => {
                   SEE MY WORK
                   <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </a>
-
-                <div className="hidden sm:flex items-center gap-3 border-l border-black/10 pl-6 py-1">
-                  <Award className="w-8 h-8 text-[#4b5563]/60" />
-                  <div className="flex flex-col text-left">
-                    <span className="text-[10px] tracking-widest text-[#4b5563] font-semibold uppercase">
-                      SRM IST
-                    </span>
-                    <span className="text-[10px] tracking-widest text-[#4b5563]/80 font-semibold uppercase">
-                      CSE Final Year
-                    </span>
-                  </div>
-                </div>
               </div>
 
               {/* Core Stats Row */}
-              <div className="animate-fade-up-delay-4 flex flex-wrap gap-8 sm:gap-12 lg:gap-16 mt-12 lg:mt-16 opacity-0 [animation-fill-mode:forwards]">
+              <div className="animate-fade-up-delay-4 flex flex-wrap gap-8 sm:gap-12 lg:gap-16 mt-12 lg:mt-16 opacity-0 [animation-fill-mode:forwards] reveal">
                 {[
                   { num: '+20', label: 'Systems Built' },
                   { num: '8.26', label: 'Academic CGPA' },
                   { num: '+19', label: 'Active Repos' },
                 ].map((stat) => (
-                  <div key={stat.label} className="flex flex-col items-start">
+                  <div key={stat.label} className="flex flex-col items-start reveal">
                     <span className="font-inter text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#1d1d1f]">
                       {stat.num}
                     </span>
@@ -408,7 +395,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Right Photo Column - Floating cutout photo aligned bottom right with no borders */}
-            <div className="lg:col-span-5 flex justify-center items-end relative h-[380px] sm:h-[480px] lg:h-[580px] w-full mt-8 lg:mt-0">
+            <div className="lg:col-span-5 flex justify-center items-end relative h-[380px] sm:h-[480px] lg:h-[580px] w-full mt-8 lg:mt-0 reveal">
               <div className="absolute inset-0 bg-gradient-to-t from-[#f8f7f4] via-transparent to-transparent z-10 pointer-events-none" />
               <img
                 src="images/profile.png"
@@ -427,14 +414,14 @@ const App: React.FC = () => {
             {/* Left: Biography description */}
             <div className="lg:col-span-6 flex flex-col items-start">
               <div className="flex items-center gap-2 mb-4 reveal">
-                <div className="w-1.5 h-1.5 bg-[#0d9488] rounded-full" />
-                <span className="text-[10px] tracking-widest text-[#0d9488] font-bold uppercase">Biography</span>
+                <div className="w-1.5 h-1.5 bg-[#4b5563] rounded-full" />
+                <span className="text-[10px] tracking-widest text-[#4b5563] font-bold uppercase">Biography</span>
               </div>
               <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f] mb-8 reveal">
                 About Me
               </h2>
               <p className="text-sm sm:text-base text-[#4b5563] leading-relaxed font-light mb-6 reveal">
-                My engineering focus lies at the convergence of full-stack software development, automated DevOps pipelines, and cloud reliability engineering (SRE). I construct clean, testable codebases and configure containerized, elastic application environments.
+                My focus lies at the convergence of full-stack software development, automated deployment pipelines, and cloud reliability (SRE). I construct clean, testable codebases and configure containerized, elastic application environments.
               </p>
               <p className="text-sm sm:text-base text-[#4b5563] leading-relaxed font-light mb-8 reveal">
                 I specialize in building production-ready architectures, setting up continuous deployment patterns, configuring microservice observability networks, and managing database state persistence.
@@ -442,12 +429,12 @@ const App: React.FC = () => {
 
               {/* Skills dashboard block */}
               <div className="w-full bg-white border border-[#e5e7eb] rounded-2xl p-6 sm:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
-                <h3 className="font-semibold text-sm uppercase tracking-wider text-[#1d1d1f] mb-6 border-b border-[#e5e7eb] pb-3">
+                <h3 className="font-semibold text-sm uppercase tracking-wider text-[#1d1d1f] mb-6 border-b border-[#e5e7eb] pb-3 reveal">
                   Technical Core Capabilities
                 </h3>
                 
                 <div className="space-y-6">
-                  <div>
+                  <div className="reveal">
                     <h4 className="text-[10px] uppercase font-bold tracking-widest text-[#4b5563]/70 mb-3">Languages</h4>
                     <div className="flex flex-wrap gap-2">
                       {['Python', 'SQL', 'JavaScript', 'TypeScript', 'C++', 'Bash'].map(t => (
@@ -455,7 +442,7 @@ const App: React.FC = () => {
                       ))}
                     </div>
                   </div>
-                  <div>
+                  <div className="reveal">
                     <h4 className="text-[10px] uppercase font-bold tracking-widest text-[#4b5563]/70 mb-3">Cloud & DevOps</h4>
                     <div className="flex flex-wrap gap-2">
                       {['Docker', 'Kubernetes', 'AWS', 'Terraform', 'GitHub Actions', 'Jenkins', 'Prometheus', 'Grafana'].map(t => (
@@ -463,7 +450,7 @@ const App: React.FC = () => {
                       ))}
                     </div>
                   </div>
-                  <div>
+                  <div className="reveal">
                     <h4 className="text-[10px] uppercase font-bold tracking-widest text-[#4b5563]/70 mb-3">Frameworks & DBs</h4>
                     <div className="flex flex-wrap gap-2">
                       {['React.js', 'Next.js', 'FastAPI', 'Flask', 'PostgreSQL', 'MySQL', 'MongoDB', 'PyTorch'].map(t => (
@@ -475,10 +462,10 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Right: Capabilities blocks */}
+            {/* Right: Capabilities blocks (Changed font colors to light black/gray) */}
             <div className="lg:col-span-6 flex flex-col gap-6 lg:mt-16">
-              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-[#0d9488]/40 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
-                <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#0d9488]">
+              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-[#1d1d1f]/40 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
+                <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#1d1d1f]">
                   <Cpu className="w-6 h-6" />
                 </div>
                 <div>
@@ -489,8 +476,8 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-[#2563eb]/40 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
-                <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#2563eb]">
+              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-[#1d1d1f]/40 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
+                <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#1d1d1f]">
                   <Cloud className="w-6 h-6" />
                 </div>
                 <div>
@@ -501,7 +488,7 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-black/20 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
+              <div className="bg-white border border-[#e5e7eb] p-6 sm:p-8 rounded-2xl flex items-start gap-5 hover:border-[#1d1d1f]/40 transition-colors duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
                 <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e5e7eb] rounded-xl flex items-center justify-center text-[#1d1d1f]">
                   <Server className="w-6 h-6" />
                 </div>
@@ -522,8 +509,8 @@ const App: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
               <div className="flex items-center gap-2 mb-4 reveal">
-                <div className="w-1.5 h-1.5 bg-[#2563eb] rounded-full" />
-                <span className="text-[10px] tracking-widest text-[#2563eb] font-bold uppercase">Engineering Work</span>
+                <div className="w-1.5 h-1.5 bg-[#4b5563] rounded-full" />
+                <span className="text-[10px] tracking-widest text-[#4b5563] font-bold uppercase">Work Showcase</span>
               </div>
               <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f] reveal">
                 Selected Projects
@@ -534,8 +521,8 @@ const App: React.FC = () => {
             <div className="flex flex-wrap gap-2 reveal">
               {[
                 { id: 'ai-ml', label: 'Intelligent Systems', icon: Cpu },
-                { id: 'devops', label: 'DevOps & Infra', icon: Cloud },
-                { id: 'systems', label: 'Full-Stack & Systems', icon: Server },
+                { id: 'devops', label: 'Cloud & Deployments', icon: Cloud },
+                { id: 'systems', label: 'Web & Applications', icon: Server },
               ].map((tab) => {
                 const Icon = tab.icon;
                 return (
@@ -569,7 +556,7 @@ const App: React.FC = () => {
                 >
                   <div className="tilt-inner transition-transform duration-100 ease-out flex flex-col flex-grow">
                     <div className="flex justify-between items-start mb-6">
-                      <span className="text-[9px] uppercase tracking-wider text-[#0d9488] font-bold">
+                      <span className="text-[9px] uppercase tracking-wider text-[#4b5563] font-bold">
                         {project.genreLabel}
                       </span>
                       <a
@@ -611,8 +598,8 @@ const App: React.FC = () => {
         <section id="credentials" className="py-24 border-t border-[#e5e7eb] reveal">
           <div className="flex flex-col items-start mb-12">
             <div className="flex items-center gap-2 mb-4 reveal">
-              <div className="w-1.5 h-1.5 bg-[#8b5cf6] rounded-full" />
-              <span className="text-[10px] tracking-widest text-[#8b5cf6] font-bold uppercase">Qualifications</span>
+              <div className="w-1.5 h-1.5 bg-[#4b5563] rounded-full" />
+              <span className="text-[10px] tracking-widest text-[#4b5563] font-bold uppercase">Qualifications</span>
             </div>
             <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f] reveal">
               Education & Certifications
@@ -621,28 +608,28 @@ const App: React.FC = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             
-            {/* Timeline Panel */}
+            {/* Timeline Panel (Removed GraduationCap icon) */}
             <div className="lg:col-span-7 reveal">
-              <h3 className="font-semibold text-sm uppercase tracking-widest text-[#1d1d1f] mb-8 flex items-center gap-3">
-                <GraduationCap className="w-5 h-5 text-[#0d9488]" /> Academic Timeline
+              <h3 className="font-semibold text-sm uppercase tracking-widest text-[#1d1d1f] mb-8">
+                Academic Timeline
               </h3>
               
               <div className="border-l border-[#e5e7eb] pl-6 ml-3 space-y-12">
-                <div className="relative">
-                  <div className="absolute w-3 h-3 bg-[#0d9488] rounded-full left-[-32.5px] top-1.5 border border-[#f8f7f4]" />
+                <div className="relative reveal">
+                  <div className="absolute w-3 h-3 bg-[#4b5563] rounded-full left-[-32.5px] top-1.5 border border-[#f8f7f4]" />
                   <div className="flex items-center gap-3 mb-2">
                     <span className="text-xs text-[#1d1d1f] font-bold">2023 - 2027</span>
-                    <span className="text-[9px] uppercase tracking-wider font-bold bg-[#0d9488]/10 border border-[#0d9488]/20 text-[#0d9488] px-2 py-0.5 rounded">Final Year</span>
+                    <span className="text-[9px] uppercase tracking-wider font-bold bg-black/5 border border-black/10 text-[#4b5563] px-2 py-0.5 rounded">Final Year</span>
                   </div>
                   <h4 className="font-bold text-lg text-[#1d1d1f] mb-1">SRM Institute of Science and Technology</h4>
-                  <p className="text-xs text-[#4b5563] font-medium mb-3">B.Tech in Computer Science & Engineering</p>
+                  <p className="text-xs text-[#4b5563] font-medium mb-3">B.Tech in Computer Science</p>
                   <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed font-light mb-3">
-                    Engineering core competencies include Operating Systems, Object-Oriented Analysis, Relational Database Management, Software Engineering, and Computer Networks.
+                    Core subjects include Operating Systems, Object-Oriented Analysis, Relational Database Management, Software Engineering, and Computer Networks.
                   </p>
                   <span className="inline-block text-xs bg-white border border-[#e5e7eb] text-[#1d1d1f] px-3 py-1 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.01)]">CGPA: 8.26 / 10.00</span>
                 </div>
 
-                <div className="relative">
+                <div className="relative reveal">
                   <div className="absolute w-3 h-3 bg-neutral-300 rounded-full left-[-32.5px] top-1.5 border border-[#f8f7f4]" />
                   <div className="flex items-center gap-3 mb-2">
                     <span className="text-xs text-[#4b5563] font-bold">2021 - 2023</span>
@@ -655,10 +642,10 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Certifications Block */}
+            {/* Certifications Block (Removed CertIcon) */}
             <div className="lg:col-span-5 reveal">
-              <h3 className="font-semibold text-sm uppercase tracking-widest text-[#1d1d1f] mb-8 flex items-center gap-3">
-                <Award className="w-5 h-5 text-[#2563eb]" /> Certifications
+              <h3 className="font-semibold text-sm uppercase tracking-widest text-[#1d1d1f] mb-8">
+                Certifications
               </h3>
 
               <div className="space-y-3.5">
@@ -669,8 +656,8 @@ const App: React.FC = () => {
                   { name: 'MERN Stack Developer Internship', issuer: 'EY GDS & AICTE', year: '2025' },
                   { name: 'Getting Started with AI', issuer: 'IBM', year: '2026' },
                 ].map((cert) => (
-                  <div key={cert.name} className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-[#2563eb]/20 transition-all duration-300">
-                    <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center text-[#2563eb]">
+                  <div key={cert.name} className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
+                    <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center text-[#1d1d1f]">
                       <Award className="w-5 h-5" />
                     </div>
                     <div>
@@ -690,14 +677,14 @@ const App: React.FC = () => {
           <div className="bg-white border border-[#e5e7eb] rounded-3xl p-8 sm:p-12 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
             <div className="max-w-xl text-left">
               <div className="flex items-center gap-2 mb-4 reveal">
-                <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full" />
-                <span className="text-[10px] tracking-widest text-yellow-600 font-bold uppercase">Let's Collaborate</span>
+                <div className="w-1.5 h-1.5 bg-[#4b5563] rounded-full" />
+                <span className="text-[10px] tracking-widest text-[#4b5563] font-bold uppercase">Let's Collaborate</span>
               </div>
               <h2 className="font-podium text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider text-[#1d1d1f] mb-6 reveal">
                 Get In Touch
               </h2>
               <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed font-light reveal">
-                I am seeking full-time software engineering roles, developer internships, or technical collaborations. Drop me a line and let's construct something durable.
+                I am seeking full-time software developer roles, graduate placements, or technical collaborations. Drop me a line and let's construct something durable.
               </p>
             </div>
 
