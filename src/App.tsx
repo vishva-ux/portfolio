@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowUpRight, X, Cpu, Cloud, Server, Award, Mail } from 'lucide-react';
+import { ArrowUpRight, X, Cpu, Cloud, Server, Mail } from 'lucide-react';
 
 const App: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -37,7 +37,7 @@ const App: React.FC = () => {
     };
   }, []);
 
-  // Categorized repositories
+  // 19 categorized repositories
   const projects = [
     {
       title: "AI Village Autonomous Simulator",
@@ -221,7 +221,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div ref={scrollRef} className="relative w-full min-h-screen bg-[#f8f7f4] text-[#1d1d1f] font-inter overflow-x-hidden selection:bg-[#2563eb]/10 selection:text-[#2563eb]">
+    <div ref={scrollRef} className="relative w-full min-h-screen bg-[#ffffff] text-[#1d1d1f] font-inter overflow-x-hidden selection:bg-[#2563eb]/10 selection:text-[#2563eb]">
       
       {/* Background Liquid Soft Gradient Blurs */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
@@ -240,7 +240,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Sticky Glass Navigation Header */}
-      <header className="fixed top-0 left-0 w-full z-40 px-6 sm:px-10 lg:px-16 py-5 lg:py-6 flex justify-between items-center bg-[#f8f7f4]/80 backdrop-blur-md border-b border-[#e5e7eb]">
+      <header className="fixed top-0 left-0 w-full z-40 px-6 sm:px-10 lg:px-16 py-5 lg:py-6 flex justify-between items-center bg-[#ffffff]/80 backdrop-blur-md border-b border-[#e5e7eb]">
         <div className="flex items-center">
           {/* Removed top left logo text */}
         </div>
@@ -283,7 +283,7 @@ const App: React.FC = () => {
 
       {/* Fullscreen Mobile Navigation Menu */}
       <div
-        className={`fixed inset-0 z-50 bg-[#f8f7f4]/98 backdrop-blur-md flex flex-col justify-between px-6 sm:px-10 py-6 transition-all duration-500 ${
+        className={`fixed inset-0 z-50 bg-[#ffffff]/98 backdrop-blur-md flex flex-col justify-between px-6 sm:px-10 py-6 transition-all duration-500 ${
           menuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
         }`}
       >
@@ -396,7 +396,7 @@ const App: React.FC = () => {
 
             {/* Right Photo Column - Floating cutout photo aligned bottom right with no borders */}
             <div className="lg:col-span-5 flex justify-center items-end relative h-[380px] sm:h-[480px] lg:h-[580px] w-full mt-8 lg:mt-0 reveal">
-              <div className="absolute inset-0 bg-gradient-to-t from-[#f8f7f4] via-transparent to-transparent z-10 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#ffffff] via-transparent to-transparent z-10 pointer-events-none" />
               <img
                 src="images/profile.png"
                 alt="R. Vishva Kanna"
@@ -427,7 +427,7 @@ const App: React.FC = () => {
                 I specialize in building production-ready architectures, setting up continuous deployment patterns, configuring microservice observability networks, and managing database state persistence.
               </p>
 
-              {/* Skills dashboard block */}
+              {/* Skills dashboard block (Removed C++ and Bash) */}
               <div className="w-full bg-white border border-[#e5e7eb] rounded-2xl p-6 sm:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.02)] reveal">
                 <h3 className="font-semibold text-sm uppercase tracking-wider text-[#1d1d1f] mb-6 border-b border-[#e5e7eb] pb-3 reveal">
                   Technical Core Capabilities
@@ -437,7 +437,7 @@ const App: React.FC = () => {
                   <div className="reveal">
                     <h4 className="text-[10px] uppercase font-bold tracking-widest text-[#4b5563]/70 mb-3">Languages</h4>
                     <div className="flex flex-wrap gap-2">
-                      {['Python', 'SQL', 'JavaScript', 'TypeScript', 'C++', 'Bash'].map(t => (
+                      {['Python', 'SQL', 'JavaScript', 'TypeScript', 'HTML / CSS'].map(t => (
                         <span key={t} className="text-xs px-3.5 py-1.5 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg text-[#1d1d1f] font-medium">{t}</span>
                       ))}
                     </div>
@@ -453,7 +453,7 @@ const App: React.FC = () => {
                   <div className="reveal">
                     <h4 className="text-[10px] uppercase font-bold tracking-widest text-[#4b5563]/70 mb-3">Frameworks & DBs</h4>
                     <div className="flex flex-wrap gap-2">
-                      {['React.js', 'Next.js', 'FastAPI', 'Flask', 'PostgreSQL', 'MySQL', 'MongoDB', 'PyTorch'].map(t => (
+                      {['React.js', 'Next.js', 'FastAPI', 'Express.js', 'PostgreSQL', 'MySQL', 'MongoDB', 'PyTorch'].map(t => (
                         <span key={t} className="text-xs px-3.5 py-1.5 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg text-[#1d1d1f] font-medium">{t}</span>
                       ))}
                     </div>
@@ -608,7 +608,7 @@ const App: React.FC = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             
-            {/* Timeline Panel (Removed GraduationCap icon) */}
+            {/* Timeline Panel */}
             <div className="lg:col-span-7 reveal">
               <h3 className="font-semibold text-sm uppercase tracking-widest text-[#1d1d1f] mb-8">
                 Academic Timeline
@@ -616,7 +616,7 @@ const App: React.FC = () => {
               
               <div className="border-l border-[#e5e7eb] pl-6 ml-3 space-y-12">
                 <div className="relative reveal">
-                  <div className="absolute w-3 h-3 bg-[#4b5563] rounded-full left-[-32.5px] top-1.5 border border-[#f8f7f4]" />
+                  <div className="absolute w-3 h-3 bg-[#4b5563] rounded-full left-[-32.5px] top-1.5 border border-[#ffffff]" />
                   <div className="flex items-center gap-3 mb-2">
                     <span className="text-xs text-[#1d1d1f] font-bold">2023 - 2027</span>
                     <span className="text-[9px] uppercase tracking-wider font-bold bg-black/5 border border-black/10 text-[#4b5563] px-2 py-0.5 rounded">Final Year</span>
@@ -624,13 +624,13 @@ const App: React.FC = () => {
                   <h4 className="font-bold text-lg text-[#1d1d1f] mb-1">SRM Institute of Science and Technology</h4>
                   <p className="text-xs text-[#4b5563] font-medium mb-3">B.Tech in Computer Science</p>
                   <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed font-light mb-3">
-                    Core subjects include Operating Systems, Object-Oriented Analysis, Relational Database Management, Software Engineering, and Computer Networks.
+                    Engineering core competencies include Operating Systems, Object-Oriented Analysis, Relational Database Management, Software Engineering, and Computer Networks.
                   </p>
                   <span className="inline-block text-xs bg-white border border-[#e5e7eb] text-[#1d1d1f] px-3 py-1 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.01)]">CGPA: 8.26 / 10.00</span>
                 </div>
 
                 <div className="relative reveal">
-                  <div className="absolute w-3 h-3 bg-neutral-300 rounded-full left-[-32.5px] top-1.5 border border-[#f8f7f4]" />
+                  <div className="absolute w-3 h-3 bg-neutral-300 rounded-full left-[-32.5px] top-1.5 border border-[#ffffff]" />
                   <div className="flex items-center gap-3 mb-2">
                     <span className="text-xs text-[#4b5563] font-bold">2021 - 2023</span>
                     <span className="text-[9px] uppercase tracking-wider font-bold bg-[#f8f7f4] border border-[#e5e7eb] text-[#4b5563] px-2 py-0.5 rounded">Schooling</span>
@@ -642,30 +642,92 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Certifications Block (Removed CertIcon) */}
+            {/* Certifications Block with Brand SVG Logos */}
             <div className="lg:col-span-5 reveal">
               <h3 className="font-semibold text-sm uppercase tracking-widest text-[#1d1d1f] mb-8">
                 Certifications
               </h3>
 
               <div className="space-y-3.5">
-                {[
-                  { name: 'AWS Cloud Practitioner Essentials', issuer: 'Amazon Web Services', year: '2026' },
-                  { name: 'Fundamentals of DevOps on AWS', issuer: 'Simplilearn', year: '2026' },
-                  { name: 'Linux Unhatched Certification', issuer: 'Cisco Networking Academy', year: '2026' },
-                  { name: 'MERN Stack Developer Internship', issuer: 'EY GDS & AICTE', year: '2025' },
-                  { name: 'Getting Started with AI', issuer: 'IBM', year: '2026' },
-                ].map((cert) => (
-                  <div key={cert.name} className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
-                    <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center text-[#1d1d1f]">
-                      <Award className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">{cert.name}</h4>
-                      <span className="text-[10px] text-[#4b5563]">{cert.issuer} &bull; {cert.year}</span>
-                    </div>
+                {/* 1. AWS Cloud Practitioner */}
+                <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
+                  <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
+                    {/* AWS Logo smile SVG */}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-[#FF9900]">
+                      <path d="M4 14c2.5 3 6.5 3 9 0M14 11l3 3-3 3"/>
+                    </svg>
                   </div>
-                ))}
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">AWS Cloud Practitioner Essentials</h4>
+                    <span className="text-[10px] text-[#4b5563]">Amazon Web Services &bull; 2026</span>
+                  </div>
+                </div>
+
+                {/* 2. DevOps on AWS */}
+                <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
+                  <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
+                    {/* Simplilearn cap SVG */}
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#0A66C2]">
+                      <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                      <path d="M5 13.18v4l7 3.82 7-3.82v-4L12 17l-7-3.82z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">Fundamentals of DevOps on AWS</h4>
+                    <span className="text-[10px] text-[#4b5563]">Simplilearn &bull; 2026</span>
+                  </div>
+                </div>
+
+                {/* 3. Cisco Linux Unhatched */}
+                <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
+                  <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
+                    {/* Cisco vertical bridge logo */}
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#049FD9]">
+                      <rect x="2" y="10" width="2" height="4" rx="0.5"/>
+                      <rect x="5" y="7" width="2" height="10" rx="0.5"/>
+                      <rect x="8" y="5" width="2" height="14" rx="0.5"/>
+                      <rect x="11" y="8" width="2" height="8" rx="0.5"/>
+                      <rect x="14" y="5" width="2" height="14" rx="0.5"/>
+                      <rect x="17" y="7" width="2" height="10" rx="0.5"/>
+                      <rect x="20" y="10" width="2" height="4" rx="0.5"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">Linux Unhatched Certification</h4>
+                    <span className="text-[10px] text-[#4b5563]">Cisco Networking Academy &bull; 2026</span>
+                  </div>
+                </div>
+
+                {/* 4. EY GDS Internship */}
+                <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
+                  <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
+                    {/* EY yellow brand card SVG */}
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                      <rect x="3" y="3" width="18" height="18" rx="2" fill="#1D1D1F"/>
+                      <polygon points="12,18 18,18 18,12" fill="#FFE600"/>
+                      <text x="5" y="13" fill="#FFFFFF" fontSize="8" fontWeight="bold" fontFamily="sans-serif">EY</text>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">MERN Stack Developer Internship</h4>
+                    <span className="text-[10px] text-[#4b5563]">EY GDS & AICTE &bull; 2025</span>
+                  </div>
+                </div>
+
+                {/* 5. IBM AI Certification */}
+                <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] p-4 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.015)] hover:border-black/20 transition-all duration-300 reveal">
+                  <div className="w-10 h-10 bg-[#f8f7f4] border border-[#e5e7eb] rounded-lg flex items-center justify-center">
+                    {/* IBM striped block SVG */}
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#0530AD]">
+                      <path d="M2 4h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2zm0 3h20v2H2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#1d1d1f] mb-0.5">Getting Started with AI</h4>
+                    <span className="text-[10px] text-[#4b5563]">IBM &bull; 2026</span>
+                  </div>
+                </div>
+
               </div>
             </div>
 
